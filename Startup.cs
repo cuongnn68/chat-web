@@ -33,6 +33,11 @@ namespace DiscordRipoff
             });
 
             services.AddScoped<UserServices>();
+
+            var secretKey = config["JWT:Secret"];
+            services.AddSingleton<JWTService>(services => {
+                return new JWTService(secretKey);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
