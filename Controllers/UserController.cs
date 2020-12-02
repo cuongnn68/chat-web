@@ -1,10 +1,12 @@
+using System.Threading.Tasks;
 using DiscordRipoff.Entities;
 using DiscordRipoff.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DiscordRipoff.Controllers {
     [ApiController]
-    public class UserController {
+    [Route("api/user")]
+    public class UserController : Controller{
         private UserServices userServices;
 
         public UserController(UserServices userServices) {
@@ -20,8 +22,24 @@ namespace DiscordRipoff.Controllers {
                 Email = model.Email
             };
             var ok = await userServices.CreateUserAsync(user);
-            if(ok) return RedirectToRouteResult;
+            if(ok) return Ok();
+            return Conflict("Cant register");
         }
+
+        [HttpPost]
+        [Route("auth")]
+        public async Task<IActionResult> LoginAsync(LoginModel model) {
+            var ok = await userServices.ValidateUserAsync(model.Username, model.Password);
+            if(!ok) return Unauthorized("");
+            // create JWT and return below
+            return Ok();
+        }
+    }
+
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 
     public class RegisterModel {

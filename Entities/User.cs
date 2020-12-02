@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DiscordRipoff.Entities {
+namespace DiscordRipoff.Entities { //TODO: migrations again after update entities
     public class User {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // auto increase

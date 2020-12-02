@@ -1,13 +1,14 @@
 using System.Linq;
 using System.Threading.Tasks;
+using DiscordRipoff.Data;
 using DiscordRipoff.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordRipoff.Services {
     public class UserServices {
-        private DbContext dbContext;
+        private AppDbContext dbContext;
 
-        public UserServices(DbContext dbContext) {
+        public UserServices(AppDbContext dbContext) {
             this.dbContext = dbContext;
         }
         public async Task<bool> CreateUserAsync(User user) {

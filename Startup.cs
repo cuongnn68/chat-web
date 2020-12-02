@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DiscordRipoff.Data;
+using DiscordRipoff.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +31,8 @@ namespace DiscordRipoff
             services.AddDbContext<AppDbContext>(options => {
                 options.UseSqlite(conenctionString);
             });
+
+            services.AddScoped<UserServices>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
