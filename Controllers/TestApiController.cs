@@ -8,15 +8,21 @@ using System.Linq;
 using DiscordRipoff.Entities;
 using DiscordRipoff.Services;
 using Microsoft.AspNetCore.Mvc;
+using DiscordRipoff.Data;
 
 namespace DiscordRipoff.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class TestApiController : Controller {
         private JWTService jwtService;
+        private AppDbContext dbContext;
 
-        public TestApiController(JWTService jwtService) {
+        public TestApiController(
+            JWTService jwtService,
+            AppDbContext dbContext) 
+        {
             this.jwtService = jwtService;
+            this.dbContext = dbContext;
         }
         
         [HttpGet]
@@ -47,8 +53,7 @@ namespace DiscordRipoff.Controllers {
         [Route("validate-jwt")]
         public object ValidateJWT() {
             var token = HttpContext.Request.Headers["Test-Header"].FirstOrDefault()?.Split(" ").Last();
-            return jwtService.ValidateTokent(token);
-            
+            return jwtService.ValidateTokent(dbContext, token); 
         }
     } 
 

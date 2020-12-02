@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Text;
+using DiscordRipoff.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
 namespace DiscordRipoff.Services {
@@ -37,9 +40,13 @@ namespace DiscordRipoff.Services {
             return handler.WriteToken(token);
         }
 
-        public bool ValidateTokent(string token) {
+        public bool ValidateTokent(
+            [FromServices] AppDbContext dbContext,
+            string token) 
+        {
             var handler = new JwtSecurityTokenHandler();
-
+            var loggedOut = dbContext.Blacklist.FirstOrDefault(list => list.JWT == token) != null;
+            if(loggedOut) return false;
             try {
                 handler.ValidateToken(token, GetDefaultParam(), out var _);
             } catch (SecurityTokenException e) {
@@ -55,10 +62,13 @@ namespace DiscordRipoff.Services {
                 ValidateIssuer = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ClockSkew = new TimeSpan(0,0,1),
+                ClockSkew = new TimeSpan(0,0,1), // TODO: so dump
                 IssuerSigningKey = securityKey,
             };
         }
 
+        public DateTime GetTimeExpired(string token) {
+            return new JwtSecurityToken(token).ValidTo;
+        } 
     }
 }
