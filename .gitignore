@@ -1,2 +1,5 @@
 bin/
 obj/
+.vscode/
+
+client-app/node_modules/

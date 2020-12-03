@@ -23,6 +23,11 @@ namespace DiscordRipoff
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSpaStaticFiles(options => {
+                options.RootPath = "client-app/dist";
+            });
+            
+
             // services.AddMvc();
             services.AddControllersWithViews();
             
@@ -53,6 +58,16 @@ namespace DiscordRipoff
             {
                 // endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
+            });
+
+            app.UseSpaStaticFiles();
+            app.UseSpa(builder => {
+                // builder.Options.DefaultPage = "/testDefaultPage";
+                builder.Options.SourcePath = "client-app";
+                if(env.IsDevelopment()) {
+                    // builder.Options.PackageManagerCommand = "npm run serve";
+                    builder.UseProxyToSpaDevelopmentServer("http://localhost:8080/");
+                }
             });
         }
     }
