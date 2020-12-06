@@ -30,7 +30,7 @@ namespace DiscordRipoff.Services {
                     {"username", username},
                 },
                 NotBefore = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddSeconds(10),
+                Expires = DateTime.UtcNow.AddDays(1),
                 IssuedAt = DateTime.UtcNow,
             };
             // Console.WriteLine(DateTime.UtcNow.AddSeconds(10));
@@ -62,7 +62,8 @@ namespace DiscordRipoff.Services {
                 ValidateIssuer = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ClockSkew = new TimeSpan(0,0,1), // TODO: so dump
+                ClockSkew = new TimeSpan(0,0,1), 
+                // RM: so dump
                 IssuerSigningKey = securityKey,
             };
         }

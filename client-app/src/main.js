@@ -8,3 +8,6 @@ new Vue({
   router,
   render: h => h(somethingEles)
 }).$mount("#app");
+
+localStorage.setItem("domain", "localhost:5001");
+document.title = "Discord ripoff";

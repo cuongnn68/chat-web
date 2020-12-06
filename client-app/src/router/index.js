@@ -20,7 +20,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "LOGin", // FIXME: name not fucking matter again ?? 
+    name: "LOGin", // RE: name not fucking matter again ?? 
     component: () => import("../views/Login.vue")
   },
   {
@@ -32,14 +32,36 @@ const routes = [
     path: "/chat",
     name: "Chat",
     component: () => import("../views/Chat.vue")
-  }
+  },
   //TODO: add other route
+  {
+    path: "*",
+    name: "Home",
+    component: Home
+  }
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("token");
+  const privatePage = ["/chat", ];
+  const publicPage = ["/", "/about", "/login", "/register"]
+
+  const exist = publicPage.includes(to.path);
+  if(!exist) {
+    next("/");
+  }
+  const requiredAuth = privatePage.includes(to.path);
+  if(requiredAuth && !token) {
+    next("/login");
+  }
+  next();
+  
+});
+
+export default router;

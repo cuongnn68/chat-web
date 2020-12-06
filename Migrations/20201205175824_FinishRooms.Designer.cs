@@ -3,14 +3,16 @@ using System;
 using DiscordRipoff.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DiscordRipoff.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201205175824_FinishRooms")]
+    partial class FinishRooms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,10 +63,15 @@ namespace DiscordRipoff.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("RoomId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("RoomUserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoomId");
 
                     b.HasIndex("RoomUserId");
 
@@ -131,8 +138,12 @@ namespace DiscordRipoff.Migrations
 
             modelBuilder.Entity("DiscordRipoff.Entities.RoomMessage", b =>
                 {
-                    b.HasOne("DiscordRipoff.Entities.RoomUser", "RoomUser")
+                    b.HasOne("DiscordRipoff.Entities.Room", null)
                         .WithMany("RoomMessages")
+                        .HasForeignKey("RoomId");
+
+                    b.HasOne("DiscordRipoff.Entities.RoomUser", "RoomUser")
+                        .WithMany()
                         .HasForeignKey("RoomUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -161,12 +172,9 @@ namespace DiscordRipoff.Migrations
 
             modelBuilder.Entity("DiscordRipoff.Entities.Room", b =>
                 {
-                    b.Navigation("RoomUsers");
-                });
-
-            modelBuilder.Entity("DiscordRipoff.Entities.RoomUser", b =>
-                {
                     b.Navigation("RoomMessages");
+
+                    b.Navigation("RoomUsers");
                 });
 #pragma warning restore 612, 618
         }

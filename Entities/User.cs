@@ -2,17 +2,34 @@ using System.Data;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+using System;
 
-namespace DiscordRipoff.Entities { //TODO: migrations again after update entities
+namespace DiscordRipoff.Entities {
+    //TODO: migrations again after update entities
     public class User {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // auto increase
         public int Id { get; set; }
+        [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage="test regex")]
+        [Required]
         public string Username { get; set; }
-        public string Password { get; set; } // TODO: hash password
+
+        [JsonIgnore]
+        [Required]
+        public string Password { get; set; }
+        // TODO: hash password
+
         public string FullName { get; set; }
+
         public string Email { get; set; }
+
+        public string Phone { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
+
         
+
     }
 
     public class UserStoreTest {

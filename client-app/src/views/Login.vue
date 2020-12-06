@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import * as api from "../api/userAPI.js";
 export default {
   name: "Login",
   data: function() {
@@ -30,6 +31,7 @@ export default {
   methods: {
     nameOfMethod(e) {
       // e.preventDefault();
+      api.testAPI("nncuong", 123);
       console.log({
         username: this.username,
         password: this.password

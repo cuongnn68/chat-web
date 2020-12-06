@@ -1,3 +1,6 @@
+omnisharp.json
+diagram/
+
 bin/
 obj/
 .vscode/

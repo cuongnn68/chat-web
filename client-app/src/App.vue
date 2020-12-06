@@ -91,7 +91,7 @@ input {
   box-shadow: 2px 2px 4px#665069;
 
   padding: 0 0.2rem 0 0.2rem; 
-  /* TODO: does this matter??? */
+  /* WHY: does this matter??? */
 
   outline:none;
 

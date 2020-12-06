@@ -13,6 +13,10 @@ namespace DiscordRipoff.Data {
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomUser> RoomUsers { get; set; }
+        
         public DbSet<JWTBlacklist> Blacklist { get; set; }
+
     }
 }
