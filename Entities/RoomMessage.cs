@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,8 +11,11 @@ namespace DiscordRipoff.Entities {
 
         [Required]
         public string Content { get; set; }
+        
+        public DateTime TimeCreated { get; set; } = DateTime.Now;
 
         public int RoomUserId { get; set; }
+
 
 
         public RoomUser RoomUser { get; set; }

@@ -36,6 +36,7 @@ export default {
         username: this.username,
         password: this.password
       });
+      this.$router.push({name: "About"});
       //TODO: call api (post method) to athenticate, then $emit
     },
   }

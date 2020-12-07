@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using System.Text.Json.Serialization;
 
 namespace DiscordRipoff
 {
@@ -84,7 +85,12 @@ namespace DiscordRipoff
             // });
             // services.AddRazorPages(); // add AddRazorViewEngine and other services
             
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(options => {
+                        // RM: stop the loop when mapping object
+                        options.JsonSerializerOptions
+                            .ReferenceHandler = ReferenceHandler.Preserve;
+                    });
             services.AddCors();
             
             services.AddAuthentication(options => {
@@ -100,6 +106,7 @@ namespace DiscordRipoff
             });
 
             services.AddScoped<UserServices>();
+            services.AddScoped<RoomServices>();
 
             var secretKey = config["JWT:Secret"];
             services.AddScoped<JWTService>(services => {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DiscordRipoff.Utils;
@@ -11,9 +12,9 @@ namespace DiscordRipoff.Entities {
         public int Id { get; set; }
 
         [Required]
-        public RoomRole MyProperty { get; set; }
+        public RoomRole Role { get; set; } = RoomRole.USER;
 
-        public DateTime TimeJoin { get; set; }
+        public DateTime TimeJoin { get; set; } = DateTime.Now;
 
         public int UserId { get; set; }
 

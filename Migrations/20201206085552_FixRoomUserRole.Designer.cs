@@ -3,14 +3,16 @@ using System;
 using DiscordRipoff.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DiscordRipoff.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201206085552_FixRoomUserRole")]
+    partial class FixRoomUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -64,14 +66,11 @@ namespace DiscordRipoff.Migrations
                     b.Property<int>("RoomUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("TimeCreated")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("RoomUserId");
 
-                    b.ToTable("RoomMessages");
+                    b.ToTable("RoomMessage");
                 });
 
             modelBuilder.Entity("DiscordRipoff.Entities.RoomUser", b =>
@@ -94,7 +93,7 @@ namespace DiscordRipoff.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("RoomId", "UserId");
+                    b.HasIndex("RoomId");
 
                     b.HasIndex("UserId");
 

@@ -1,9 +1,9 @@
 export function testAPI(username, id) {
 
-  fetch("https://localhost:5001/api/testapi/jwt?id=1&id=2")
-    .then(res => {
-      const tes = res.json();
-    })
+  // fetch("https://localhost:5001/api/testapi/jwt?id=1&id=2")
+  //   .then(res => {
+  //     const tes = res.json();
+  //   })
 
 
 

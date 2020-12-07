@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DiscordRipoff.Data;
@@ -17,6 +18,12 @@ namespace DiscordRipoff.Services {
             await dbContext.AddAsync<User>(user);
             await dbContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<User>> SearchAsync(int id, string name) {
+            return await dbContext.Users.Where(user => user.Id.ToString().Contains(id.ToString()) 
+                                            || user.Username.Contains(name))
+                                .ToListAsync();
         }
 
         public async Task<bool> ValidateUserAsync (string username, string password) {

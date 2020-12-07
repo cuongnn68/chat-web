@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DiscordRipoff.Utils {
-    public class JWTAuthenticationAttribute : ActionFilterAttribute{
+    public class JWTAuthenticationAttribute : ActionFilterAttribute{ //TODO: : AuthAttribute
         public override void OnActionExecuting(ActionExecutingContext context) {
             var token = context.HttpContext.Request.Headers["Authorization"].ToString().Split(" ").Last();
             var serviceProvider = context.HttpContext.RequestServices;

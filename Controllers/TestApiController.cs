@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DiscordRipoff.Controllers {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/testapi")]
     public class TestApiController : Controller {
         private JWTService jwtService;
         private AppDbContext dbContext;
