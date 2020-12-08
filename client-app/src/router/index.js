@@ -20,7 +20,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "LOGin", // RE: name not fucking matter again ?? 
+    name: "Login", // RM: name used to .$router.push("name-of-view") to change view //TODO is it?
     component: () => import("../views/Login.vue")
   },
   {
@@ -48,11 +48,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem("token");
-  const privatePage = ["/chat", ];
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const token = user && user["token"];
+  
+  const privatePage = ["/chat", "/search"];
   const publicPage = ["/", "/about", "/login", "/register"]
 
-  const exist = publicPage.includes(to.path);
+  const exist = publicPage.concat(privatePage).includes(to.path);
+  // console.log(publicPage);
   if(!exist) {
     next("/");
   }
@@ -61,7 +64,6 @@ router.beforeEach((to, from, next) => {
     next("/login");
   }
   next();
-  
 });
 
 export default router;

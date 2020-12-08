@@ -12,7 +12,22 @@ namespace DiscordRipoff.Data {
         {
             modelBuilder.Entity<RoomUser>()
                         .HasAlternateKey(roomUser => new {roomUser.RoomId, roomUser.UserId});
+            modelBuilder.Entity<User>()
+                        .HasIndex(user => user.Username) // ? vs Property
+                        .IsUnique();
                         
+                        // ? vs
+                        
+                        // .Entity<User>(user => {
+                        //     user.HasIndex(u => u.Id)
+                        //         .IsUnique();
+                        // });
+
+
+                        
+                        // ?: vs
+                        // .Property(user => user.Username)
+                        // .HasCheckConstraint("UNIQUE", "UNIQUE");
             base.OnModelCreating(modelBuilder);
         }
 

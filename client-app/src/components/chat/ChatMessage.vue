@@ -51,7 +51,7 @@ export default {
     maybe because i use reverse column, 
     but why solum affect row,
     i mean fukc this shit*/
-    /* WHY: what?? */
+    /* ?: what?? */
 
   }
   .username {

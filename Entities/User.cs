@@ -26,7 +26,7 @@ namespace DiscordRipoff.Entities {
 
         public string Phone { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         
 

@@ -15,8 +15,10 @@ namespace DiscordRipoff.Utils {
             var dbContext = serviceProvider.GetServices<AppDbContext>().FirstOrDefault();
             if(dbContext == null || jwtService == null || !jwtService.ValidateTokent(dbContext, token)) {
                 context.Result = new UnauthorizedResult();
+                Console.WriteLine("unauthoriztion request:");
+                Console.WriteLine(context.HttpContext.Request.Path);
+                //TODO: testing
             } 
-            Console.WriteLine("unauthoriztion request");//TODO: testing
             base.OnActionExecuting(context);
         }
     }

@@ -49,8 +49,8 @@ namespace DiscordRipoff.Services {
             if(loggedOut) return false;
             try {
                 handler.ValidateToken(token, GetDefaultParam(), out var _);
-            } catch (SecurityTokenException e) {
-                Console.WriteLine(e);
+            } catch (Exception e) {
+                Console.WriteLine(e); // TODO log
                 return false;
             }
             return true;

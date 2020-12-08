@@ -3,12 +3,14 @@ using System.Threading.Tasks;
 using DiscordRipoff.Data;
 using DiscordRipoff.Entities;
 using DiscordRipoff.Services;
+using DiscordRipoff.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordRipoff.Controllers {
     [ApiController]
     [Route("api/room")]
+    // [JWTAuthentication]
     public class RoomController : Controller {
         private RoomServices roomServices;
         private AppDbContext dbContext;
@@ -88,7 +90,7 @@ namespace DiscordRipoff.Controllers {
 
         [HttpPost("{roomId}/message")]
         public async Task<IActionResult> CreateMessage(int roomId, MessageModel model) {
-            var mess = await roomServices.CreatedMessageAsync(model.RoomUserId, model.Content);
+            var mess = await roomServices.CreatedMessageAsync(model.UserId, roomId, model.Content);
             if(mess == null) return Conflict();
             // TODO: ues SignalR here
             return Ok(mess);
@@ -97,7 +99,7 @@ namespace DiscordRipoff.Controllers {
 
     public class MessageModel {
         public string Content { get; set; }
-        public int RoomUserId { get; set; }
+        public int UserId { get; set; }
     }
 
     //RM: ctrl shift o: show all detail (class, prop, method ...) in file

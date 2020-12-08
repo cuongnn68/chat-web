@@ -7,14 +7,38 @@
     <!-- <router-link class="link" to="/add-room">Add Room</router-link>
     <router-link class="link" to="/add-friend">Add Friend</router-link> -->
     <div class="empty"></div>
-    <router-link class="link" to="/login">Login</router-link>
-    <router-link class="link" to="/register">Register</router-link>
+    <router-link v-if="!login" class="link" to="/login">Login</router-link>
+    <router-link v-if="!login" class="link" to="/register">Register</router-link>
+    <router-link v-if="login" class="link" to="/info">Info</router-link>
+    <div v-if="login" v-on:click="logout" class="link">Logout</div>
   </div>
 </template>
 
 <script>
+import {logout} from "../api/userAPI.js";
 export default {
-
+  name: "NavBar",
+  props: [
+    "login"
+  ],
+  data: function() {
+    return {
+      // login: true,
+    }
+  },
+  computed: {
+    // loginActive: function() {
+    //   return this.login;
+    // }
+  },
+  methods: {
+    logout() {
+      logout();
+      localStorage.removeItem("userInfo");
+      this.$emit('logout');
+      this.$router.push("/login");
+    }
+  }
 }
 </script>
 
@@ -42,6 +66,7 @@ export default {
     color: #221d63;
     font-size: 20px;
     /* transition-duration: 0.35s; */
+    cursor: pointer;
   }
   .link:hover {
     background-color:#b15ebb;

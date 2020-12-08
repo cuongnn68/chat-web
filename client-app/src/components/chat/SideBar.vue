@@ -2,12 +2,21 @@
   <div class="parent">
     <div class="name">Chat Room</div>
     <div class="user">
-      <ChatRoom roomId="11111" roomName="Room 1"/>
-      <ChatRoom roomId="222" roomName="Room 2" selected="true"/>  <!-- TODO: add select solid border left -->
+      <!-- <p v-for="room in roomss" 
+                :key="room.id" 
+                v-bind:roomId="room.id" 
+                v-bind:roomName="room.name">{{room.name}}</p> -->
+      <ChatRoom v-on:click.native="choosed(room.id)"
+                v-for="room in rooms" 
+                v-bind:key="room.id" 
+                v-bind:roomId="room.id" 
+                v-bind:roomName="room.name"></ChatRoom>
+      <!-- <ChatRoom roomId="222" roomName="Room 2" selected="true"/>  //TODO: add select solid border left -->
+      <!-- <ChatRoom roomId="11111" roomName="Room 1"/>
       <ChatRoom roomId="333" roomName="Room 3"/>
       <ChatRoom roomId="444" roomName="Room 4"/>
       <ChatRoom roomId="555" roomName="Room 16"/>
-      <ChatRoom roomId="8888" roomName="Room 7"/>
+      <ChatRoom roomId="8888" roomName="Room 7"/> -->
       <!-- <ChatRoom roomId="9999" roomName="Room 18888"/>
       <ChatRoom roomId="11111" roomName="Room 1"/>
       <ChatRoom roomId="222" roomName="Room 2"/>
@@ -43,6 +52,19 @@ export default {
   components: {
     ChatRoom,
     ChatUser
+  },
+  props: [
+    "rooms"
+  ],
+  computed: {
+    roomss() {
+      return this.rooms;
+    }
+  },
+  methods: {
+    choosed(roomId) {
+      this.$emit('choose-room', roomId);
+    }
   }
 }
 </script>

@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DiscordRipoff.Controllers {
     [ApiController]
     [Route("api/user")]
+    // [JWTAuthentication]
     public class UserController : Controller {
         private UserServices userServices;
         private JWTService jwtService;
@@ -29,24 +30,34 @@ namespace DiscordRipoff.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model) {
+            Console.WriteLine("register ----");
+            var exist = await dbContext.Users.FirstOrDefaultAsync(u => u.Username == model.Username) != null;
+            if(exist) return Conflict(new ErrorModel{Error = "Username already exist"});
             var user = new User {
                 Username = model.Username,
                 Password = model.Password,
                 FullName = model.FullName,
-                Email = model.Email
+                Email = model.Email,
+                Phone = model.Phone
             };
             var ok = await userServices.CreateUserAsync(user);
             if (ok) return Ok();
-            return Conflict("Cant register");
+            return Conflict(new ErrorModel{Error = "Cant register"});
         }
 
         [HttpPost("auth")]
         public async Task<IActionResult> Login(LoginModel model) {
-            var ok = await userServices.ValidateUserAsync(model.Username, model.Password);
-            if (!ok) return Unauthorized("Wrong password or username");
+            // throw new Exception("test");
+            var ok = await userServices.ValidateUserAsync(model.Username, model.Password) ;
+            if (!ok) return Unauthorized(new ErrorModel{Error="Wrong password or username"});
             var user = await dbContext.Users.FirstOrDefaultAsync(user => user.Username == model.Username);
             var token = jwtService.CreateToken(user.Id, user.Username);
-            return Ok(token);
+            var userInfo = new UserInfoModel {
+                Token = token,
+                Username = user.Username,
+                Id = user.Id
+            };
+            return Ok(userInfo);
         }
 
         [JWTAuthentication]
@@ -81,6 +92,32 @@ namespace DiscordRipoff.Controllers {
             return Ok(users);
         }
 
+        [HttpGet("{userId}/room")]
+        [JWTAuthentication]
+        public async Task<IActionResult> GetRoom(int userId) {
+            var rooms = await userServices.GetRoomAsync(userId);
+            // var roomModels = rooms.Select(room => new RoomModel {
+            //     Id = room.Id,
+            //     Name = room.Name,
+            //     DayCreated = room.DayCreated
+            // }).ToList();
+            // foreach(var room in rooms) {
+            //     Console.WriteLine(room.Name);
+            // }
+            return Ok(rooms);
+        }
+    }
+
+    internal class RoomModel {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public DateTime DayCreated { get; set; }
+    }
+
+    public class UserInfoModel {
+        public string Token { get; set; }
+        public int Id { get; set; }
+        public string Username { get; set; }
     }
 
     public class JWTModel {
@@ -107,5 +144,11 @@ namespace DiscordRipoff.Controllers {
         public string Password { get; set; }
         public string FullName { get; set; }
         public string Email { get; set; }
+        public string Phone { get; set; }
+    }
+
+    public class ErrorModel {
+        [Required]
+        public string Error { get; set; }
     }
 }

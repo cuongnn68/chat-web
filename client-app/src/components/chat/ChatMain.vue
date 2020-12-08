@@ -35,8 +35,8 @@
         <ChatMessage username="nncuong" time="12:00" message="verry long long long long long long long long long long long long long long long long message"/>
       </div>
       <div class="chat-input">
-        <input class="input" type="text">
-        <button class="button">Send</button>
+        <input ref="ok" v-model="mess" class="input" type="text">
+        <button v-on:click="send" class="button">Send</button>
       </div>
     </div>
   </div>
@@ -48,6 +48,21 @@ export default {
   name: "ChatMain",
   components: {
     ChatMessage,
+  },
+  data() {
+    return {
+      mess: ""
+    }
+  },
+  methods: {
+    send() {
+      // this.$el.querySelector("#input"); //RM use to like normal (need id="")
+      console.log(this.mess);
+      this.$emit("send-mess", this.mess);
+
+      // this.$refs.ok.value = ""; //RM clear without binding
+      this.mess = "";
+    }
   }
 }
 </script>

@@ -29,8 +29,6 @@ namespace DiscordRipoff
             services.AddSpaStaticFiles(options => {
                 options.RootPath = "client-app/dist";
             });
-            
-
 
 
             //RM: basic mvc middlerware

@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <NavBar class="nav"/>
-    <router-view class="content"/>
+    <NavBar v-on:logout="logOut" v-bind:login="login" class="nav"/>
+    <router-view v-on:loged-in="logedIn" class="content"/>
   </div>
 </template>
 
@@ -11,6 +11,22 @@ export default {
   name: "App", // dont fukcing matter
   components: {
     NavBar
+  },
+  data: function() {
+    return {
+      login: false,
+    }
+  },
+  methods: {
+    logedIn: function() {
+      this.login = true;
+    },
+    logOut: function() {
+      this.login = false;
+    }
+  },
+  created() {
+    if(localStorage.getItem("userInfo")) this.login = true;
   }
 }
 </script>
@@ -73,9 +89,9 @@ button {
   cursor:pointer;
 }
 button:hover {
-  /* border-color: white;
+  
   color: white;
-  background-color:#b15ebb; */
+  background-color:#b15ebb;
   box-shadow: 1px 1px 4px black;
 }
 button:active {
@@ -91,7 +107,7 @@ input {
   box-shadow: 2px 2px 4px#665069;
 
   padding: 0 0.2rem 0 0.2rem; 
-  /* WHY: does this matter??? */
+  /* ?: does this matter??? */
 
   outline:none;
 

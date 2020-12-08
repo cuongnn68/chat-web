@@ -1,7 +1,7 @@
 <template>
   <div class="parent">
     <div class="child">
-      <div class="id">#{{roomId}}</div>
+      <!-- <div class="id">#{{roomId}}</div> -->
       <div class="name">{{roomName}}</div>
     </div>
   </div>
@@ -10,10 +10,14 @@
 <script>
 export default {
   name: "ChatRoom",
-  props: {
-    "roomId": String,
-    "roomName": String,
-  }
+  props: [
+    "roomId",
+    "roomName",
+  ],
+  // props: {
+  //   "roomId": String,
+  //   "roomName": String,
+  // }
 }
 </script>
 

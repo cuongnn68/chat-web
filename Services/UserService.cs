@@ -32,5 +32,12 @@ namespace DiscordRipoff.Services {
             if(user != null && user.Password == password) return true;
             return false;
         }
+
+        public async Task<List<Room>> GetRoomAsync(int userId) {
+            return await dbContext.RoomUsers.Include(ru => ru.Room)
+                            .Where(ru => ru.UserId == userId)
+                            .Select(ru => ru.Room)
+                            .ToListAsync();
+        }
     }
 }

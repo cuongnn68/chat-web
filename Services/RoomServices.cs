@@ -99,10 +99,12 @@ namespace DiscordRipoff.Services {
                                 .ToListAsync();
         }
 
-        public async Task<RoomMessage> CreatedMessageAsync(int roomUserId, string content) {
+        public async Task<RoomMessage> CreatedMessageAsync(int userId, int roomId, string content) {
+            var roomUser = await dbContext.RoomUsers.FirstOrDefaultAsync(ru => ru.UserId == userId && ru.RoomId == roomId);
+            if(roomUser == null) return null;
             var mess = new RoomMessage {
                 Content = content,
-                RoomUserId = roomUserId,
+                RoomUserId = roomUser.Id,
             };
             dbContext.Add(mess);
             await dbContext.SaveChangesAsync();
