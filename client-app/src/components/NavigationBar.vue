@@ -4,6 +4,7 @@
     <router-link class="link" to="/">Home</router-link>
     <router-link class="link" to="/about">About</router-link>
     <router-link class="link" to="/chat">Chat</router-link>
+    <router-link class="link" to="/test">Test</router-link>
     <!-- <router-link class="link" to="/add-room">Add Room</router-link>
     <router-link class="link" to="/add-friend">Add Friend</router-link> -->
     <div class="empty"></div>

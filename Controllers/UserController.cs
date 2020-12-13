@@ -16,14 +16,17 @@ namespace DiscordRipoff.Controllers {
     // [JWTAuthentication]
     public class UserController : Controller {
         private UserServices userServices;
+        private RoomServices roomServices;
         private JWTService jwtService;
         private AppDbContext dbContext;
 
         public UserController(
             UserServices userServices,
+            RoomServices roomServices,
             JWTService jwtService,
             AppDbContext dbContext) {
             this.userServices = userServices;
+            this.roomServices = roomServices;
             this.jwtService = jwtService;
             this.dbContext = dbContext;
         }
@@ -34,7 +37,7 @@ namespace DiscordRipoff.Controllers {
             var exist = await dbContext.Users.FirstOrDefaultAsync(u => u.Username == model.Username) != null;
             if(exist) return Conflict(new ErrorModel{Error = "Username already exist"});
             var user = new User {
-                Username = model.Username,
+                Username = model.Username.ToLower(),
                 Password = model.Password,
                 FullName = model.FullName,
                 Email = model.Email,
@@ -48,7 +51,7 @@ namespace DiscordRipoff.Controllers {
         [HttpPost("auth")]
         public async Task<IActionResult> Login(LoginModel model) {
             // throw new Exception("test");
-            var ok = await userServices.ValidateUserAsync(model.Username, model.Password) ;
+            var ok = await userServices.ValidateUserAsync(model.Username.ToLower(), model.Password);
             if (!ok) return Unauthorized(new ErrorModel{Error="Wrong password or username"});
             var user = await dbContext.Users.FirstOrDefaultAsync(user => user.Username == model.Username);
             var token = jwtService.CreateToken(user.Id, user.Username);
@@ -106,11 +109,19 @@ namespace DiscordRipoff.Controllers {
             // }
             return Ok(rooms);
         }
+
+        [HttpPost("{userId}/room")]
+        [JWTAuthentication]
+        public async Task<IActionResult> CreateRoom(int userId, [FromBody] RoomModel model) { // RM: put data in model so it can be binding
+            var room = await roomServices.CreateAsync(model.RoomName, userId);
+            if(room == null) return Conflict(new ErrorModel{Error="Cant create room"});
+            return Created($"/api/room/{room.Id}",room);
+        }
     }
 
-    internal class RoomModel {
+    public class RoomModel {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string RoomName { get; set; }
         public DateTime DayCreated { get; set; }
     }
 

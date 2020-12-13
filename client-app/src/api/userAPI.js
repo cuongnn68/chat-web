@@ -48,9 +48,13 @@ export function logout() {
 }
 
 export function getRooms() {
-  const info = JSON.parse(localStorage.getItem("userInfo"));
-  console.log(info["id"]);
-  const id = info["id"];
-  if(!info) throw "Not login";
+  // const info = JSON.parse(localStorage.getItem("userInfo"));
+  // const id = info["id"];
+  const id = rapi.getUserId();
   return rapi.get("/api/user/" + id + "/room", {});
 }
+
+export function newRoom(roomName) {
+  return rapi.post("/api/user/" + rapi.getUserId() + "/room", {roomName});
+}
+

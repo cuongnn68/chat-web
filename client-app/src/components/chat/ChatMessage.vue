@@ -2,7 +2,7 @@
   <div class="parent">
     <div class="child">
       <p class="info">
-        <span class="username">{{username}}:</span>  <span class="time">{{time}}</span>
+        <span class="username">{{username}}</span>  <span class="time">{{time}}</span>
       </p>
       <p class="message">{{message}}</p>
     </div>
@@ -41,7 +41,7 @@ export default {
     /* align-self: stretch; */
     /* text-align: center; */
     vertical-align: middle;
-    display: flex;
+    display: block;
     /* justify-content: space-between; */
     font-size: 17px;
 

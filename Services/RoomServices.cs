@@ -95,6 +95,8 @@ namespace DiscordRipoff.Services {
 
         public async Task<List<RoomMessage>> GetMessagesAsync(int roomId) {
             return await dbContext.RoomMessages
+                                .Include(rm => rm.RoomUser)
+                                .ThenInclude(ru => ru.User)
                                 .Where(rm => rm.RoomUser.RoomId == roomId)
                                 .ToListAsync();
         }

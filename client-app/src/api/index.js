@@ -1,4 +1,4 @@
-export default {get, post};
+export default {get, post, getToken, getUserId};
 
 //?: does it need async await here // async function return Promise so guess not
 function get(/** @type {string} */url, data) {
@@ -27,6 +27,7 @@ function get(/** @type {string} */url, data) {
 function post(url, data) {
   url = "https://" + localStorage.getItem("domain") + url;
   console.log("post: " + url);
+  console.log(JSON.stringify(data));
   const token = getToken();
   return fetch(url, {
             method: "POST",
@@ -36,11 +37,15 @@ function post(url, data) {
               "Authorization": (token && "bearer " + token),
             },
             body: JSON.stringify(data),
-          });
+          }).catch(err => console.log(err));
 }
 
 function getToken() {
   const info = JSON.parse(localStorage.getItem("userInfo"));
   if(!info) return null;
   return info["token"];
+}
+
+function getUserId() {
+  return JSON.parse(localStorage.getItem("userInfo"))["id"];
 }

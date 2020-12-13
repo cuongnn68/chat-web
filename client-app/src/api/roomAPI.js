@@ -8,3 +8,8 @@ export function sendRoomMess(roomId, userId, mess) {
   console.log(roomId);
   return rapi.post("/api/room/" + roomId + "/message", {userId: userId, content: mess});
 }
+
+export function joinRoom(roomId) {
+  const userId = rapi.getUserId();
+  return rapi.post("/api/room/" + roomId + "/user" , {userId})
+}

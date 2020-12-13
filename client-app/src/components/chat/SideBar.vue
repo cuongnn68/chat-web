@@ -1,6 +1,10 @@
 <template>
   <div class="parent">
-    <div class="name">Chat Room</div>
+    <div class="name"> <p>Chat Room {{roomId}}</p></div>
+    <div class="options">
+      <div v-on:click="$emit('showpu-joinr')" class="join-rm">Join</div>
+      <div v-on:click="$emit('showpu-creater')" class="create-rm">Create</div>
+    </div>
     <div class="user">
       <!-- <p v-for="room in roomss" 
                 :key="room.id" 
@@ -63,7 +67,13 @@ export default {
   },
   methods: {
     choosed(roomId) {
+      this.roomId = roomId;
       this.$emit('choose-room', roomId);
+    },
+  },
+  data() {
+    return {
+      roomId: "",
     }
   }
 }
@@ -74,6 +84,7 @@ export default {
     display: flex;
     flex-direction: column;
 
+    box-shadow: 1px 0px 1px lightgray;
     /* background-color: green; */
   }
   .user {
@@ -104,5 +115,29 @@ export default {
 
     box-shadow: 0px 3px 3px lightgray;
     
+  }
+  .options{
+    display:flex;
+    height: 30px;
+    /* background-color: white; */
+    color:#b15ebb;
+    cursor: pointer;
+    box-shadow: 0 1px 1px lightgray;
+  }
+  .join-rm {
+    flex-grow: 1;
+    line-height: 30px;
+  }
+  .join-rm:hover {
+    background-color: dodgerblue;
+    color: white;
+  }
+  .create-rm {
+    flex-grow: 1;
+    line-height: 30px;
+  }
+  .create-rm:hover{
+    background-color: limegreen;
+    color: white;
   }
 </style>

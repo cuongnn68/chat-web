@@ -121,6 +121,12 @@ input {
   
 }
 
+  .error {
+    margin: 15px;
+    color: red;
+    font-size: 13px;
+  }
+
   /* width */
   ::-webkit-scrollbar {
     width: 5px;

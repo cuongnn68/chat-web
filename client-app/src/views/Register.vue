@@ -67,17 +67,16 @@ export default {
               if(response.ok) {
                 this.$router.push("/login");
               } else {
-                // console.log(response.text());
                 response.json()
                         .then(value => {
-                  if(value["error"]) {
-                    this.error = value["error"];
-                  } else {
-                    this.error = response.statusText;
-                  }
-                });
+                                if(value["error"]) {
+                                  this.error = value["error"];
+                                } else {
+                                  this.error = response.statusText;
+                                }
+                        }).catch(e => console.log(e));
               }
-            });
+            }).catch(e => console.log(e));
       // api.testAPI();
 
 

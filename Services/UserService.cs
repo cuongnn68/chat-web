@@ -39,5 +39,6 @@ namespace DiscordRipoff.Services {
                             .Select(ru => ru.Room)
                             .ToListAsync();
         }
+
     }
 }

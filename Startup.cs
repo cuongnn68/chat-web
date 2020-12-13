@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Text.Json.Serialization;
+using DiscordRipoff.Hubs;
 
 namespace DiscordRipoff
 {
@@ -112,6 +113,11 @@ namespace DiscordRipoff
             });
 
             services.AddScoped<JWTAuthenticationAttribute>();
+
+            services.AddSignalRCore();
+            services.AddSignalR().AddJsonProtocol(options => {
+                
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -123,9 +129,12 @@ namespace DiscordRipoff
             app.UseStaticFiles();
 
             app.UseCors(config => {
-                config.AllowAnyOrigin()
+                config
+                    .WithOrigins("http://192.168.100.6:8080")
+                    // .AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .AllowCredentials();
             });
 
             app.UseRouting();
@@ -134,6 +143,10 @@ namespace DiscordRipoff
             {
                 // endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
+
+                endpoints.MapHub<ChatHub>("/chathub", options => {
+                    
+                });
             });
 
             app.UseSpaStaticFiles();

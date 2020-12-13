@@ -33,12 +33,17 @@ const routes = [
     name: "Chat",
     component: () => import("../views/Chat.vue")
   },
+  {
+    path: "/test",
+    name: "Test",
+    component: () => import("../views/Test.vue")
+  },
   //TODO: add other route
   {
     path: "*",
-    name: "Home",
+    name: "Any",
     component: Home
-  }
+  },
 ]
 
 const router = new VueRouter({
@@ -52,7 +57,7 @@ router.beforeEach((to, from, next) => {
   const token = user && user["token"];
   
   const privatePage = ["/chat", "/search"];
-  const publicPage = ["/", "/about", "/login", "/register"]
+  const publicPage = ["/", "/about", "/login", "/register", "/test"]
 
   const exist = publicPage.concat(privatePage).includes(to.path);
   // console.log(publicPage);

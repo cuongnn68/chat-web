@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using DiscordRipoff.Data;
 using DiscordRipoff.Entities;
@@ -57,10 +59,21 @@ namespace DiscordRipoff.Controllers {
             return Ok(users);
         }
 
+        [HttpPost("{roomId}/user")]
+        public async Task<IActionResult> AddUser(int roomId, [FromBody] NewUserModel model) {
+            try {
+                var ru = await roomServices.AddUserAsync(roomId, model.UserId);
+                if(ru == null) throw new NullReferenceException();
+            } catch {
+                return Conflict(new ErrorModel{Error="Cant join room"});
+            }
+            return Ok();
+        }
+
         [HttpPost("{roomId}/user/{userId}")]
         // public async Task<IActionResult> AddUser(int roomId, int userId) {
             //TODO //FIXME model binding not working
-        public async Task<IActionResult> AddUser([FromRoute] RoomUserModel model) {
+        public async Task<IActionResult> AddRoomUser([FromRoute] RoomUserModel model) {
             // Console.WriteLine(roomId + " " + userId);
             // var roomUser = await roomServices.AddUserAsync(roomId, userId);
             Console.WriteLine(model.RoomId + " " + model.UserId);
@@ -85,11 +98,19 @@ namespace DiscordRipoff.Controllers {
         public async Task<IActionResult> GetMessage(int roomId) {
             var mess = await roomServices.GetMessagesAsync(roomId);
             if(mess == null) return Conflict();
-            return Ok(mess);
+            var messModel = mess.Select(mess => new MessageModel{
+                Id = mess.Id,
+                Content = mess.Content,
+                UserName = mess.RoomUser.User.Username,
+                // TimeCreated = mess.TimeCreated.ToShortTimeString() + " - " + mess.TimeCreated.ToShortDateString(),
+                TimeCreated = mess.TimeCreated.ToString(provider: CultureInfo.CreateSpecificCulture("en-UK")),
+            }).Reverse().ToList();
+            return Ok(messModel);
         }
 
         [HttpPost("{roomId}/message")]
-        public async Task<IActionResult> CreateMessage(int roomId, MessageModel model) {
+        public async Task<IActionResult> CreateMessage(int roomId, NewMessageModel model) {
+            if(model.Content == "") return Conflict();
             var mess = await roomServices.CreatedMessageAsync(model.UserId, roomId, model.Content);
             if(mess == null) return Conflict();
             // TODO: ues SignalR here
@@ -97,7 +118,18 @@ namespace DiscordRipoff.Controllers {
         }
     }
 
+    public class NewUserModel {
+        public int UserId { get; set; }
+    }
+
     public class MessageModel {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public string UserName { get; set; }
+        public string TimeCreated { get; set; }
+    }
+
+    public class NewMessageModel {
         public string Content { get; set; }
         public int UserId { get; set; }
     }
