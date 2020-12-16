@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using DiscordRipoff.Controllers;
 using DiscordRipoff.Utils;
 using Microsoft.AspNetCore.SignalR;
 
@@ -8,30 +9,58 @@ namespace DiscordRipoff.Hubs {
         [JWTAuthentication]
         public string GetConnectionId() => Context.ConnectionId;
 
-        
-
-        public override bool Equals(object obj) {
-            return base.Equals(obj);
+        public void JoinTestRoom() {
+            this.Groups.AddToGroupAsync(Context.ConnectionId, "testRoom");
+        }
+        public void MessTestRoom(string mess) {
+            Clients.Group("testRoom").SendAsync("reciveTest", mess);
         }
 
-        public override int GetHashCode() {
-            return base.GetHashCode();
+        public void ShowInfo() {
+            // this.Clients.All
+            // Context.
+            int? a = null;
+            Console.WriteLine(a);
+            Console.WriteLine("run here");
+            this.Clients.All.SendAsync("AddNewMessage", "ahahaha");
+            this.Groups.AddToGroupAsync("test", Context.ConnectionId);
         }
 
-        public override Task OnConnectedAsync() {
-            return base.OnConnectedAsync();
+        public void TestJson() {
+            var model = new MessageModel {
+                Content = " tes content mess",
+                Id = 686688,
+                UserName = "me"
+            };
+            Clients.All.SendAsync("testJson", model);
         }
 
-        public override Task OnDisconnectedAsync(Exception exception) {
+
+        // public override bool Equals(object obj) {
+        //     return base.Equals(obj);
+        // }
+
+        // public override int GetHashCode() {
+        //     return base.GetHashCode();
+        // }
+
+        // public override Task OnConnectedAsync() {
+        //     return base.OnConnectedAsync();
+        // }
+
+        // ? also remove in group???
+        // TODO: if not use this to remove all user group when sign out
+        public override Task OnDisconnectedAsync(Exception exception) { 
+            Console.WriteLine(Context.ConnectionId + " disconnected");
             return base.OnDisconnectedAsync(exception);
         }
 
-        public override string ToString() {
-            return base.ToString();
-        }
+        // public override string ToString() {
+        //     return base.ToString();
+        // }
 
-        protected override void Dispose(bool disposing) {
-            base.Dispose(disposing);
-        }
+        // protected override void Dispose(bool disposing) {
+        //     base.Dispose(disposing);
+        // }
     }
 }

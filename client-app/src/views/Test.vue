@@ -1,20 +1,25 @@
 <template>
   <div>
-    <button v-on:click="getConnectionId">Run Test</button>
+    <input v-model=mess>
+    <button v-on:click="runTest">Run Test</button>
     <p> {{message}} </p>
   </div>
 </template>
 
 <script>
-import {HubConnectionBuilder} from "@microsoft/signalr";
+import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
 import api from "../api/index.js";
 export default {
   name: "Test",
   data() {
     return {
+      mess:"",
+      /** @type {string} */
       message: "",
+      /** @type {string} */
       connectionId: "",
-      connection: HubConnectionBuilder
+      /** @type {signalR.HubConnection} */
+      connection: HubConnection
     }
   },
   methods: {
@@ -24,16 +29,29 @@ export default {
             .withAutomaticReconnect()
             .build();
       this.connection.on("AddNewMessage", message => {
-        // TODO: add message to list
-        console.log("mess go here");
+
+        console.log(message);
+      });
+      this.connection.on("reciveTest", str => {
+        console.log(str);
+      });
+      this.connection.on("testJson", res => {
+        console.log(res);
       })
     }, 
     connectHub() {
       this.connection.start();
     },
     getConnectionId() {
-      const val = this.connection.invoke("getConnectionId")
+      const val = this.connection.invoke("GetConnectionId").then(res => console.log(res));
       console.log(val);
+    },
+    testMess() {
+      this.connection.send("joinTestRoom");
+      this.connection.invoke("messTestRoom", this.mess).then(res => console.log(res));
+    },
+    runTest() {
+      this.connection.send("testJson");
     }
   },
   created() {
@@ -42,7 +60,8 @@ export default {
     // this.connection.onClose();
   },
   beforeDestroy() {
-    this.connection.onClose(() => console.log("fuck this shit"));
+    this.connection.stop();
+    this.connection.onclose(console.log("on close"));
     // this.connection
   }
 }

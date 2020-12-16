@@ -1,6 +1,6 @@
 <template>
   <div class="parent">
-    <div class="name"> <p>Chat Room {{roomId}}</p></div>
+    <div class="name"> <p>Chat Room #{{roomId}}</p></div>
     <div class="options">
       <div v-on:click="$emit('showpu-joinr')" class="join-rm">Join</div>
       <div v-on:click="$emit('showpu-creater')" class="create-rm">Create</div>

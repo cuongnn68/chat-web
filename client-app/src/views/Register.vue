@@ -35,7 +35,7 @@
 import * as api from "../api/userAPI.js";
 export default {
   name: "Register",
-  data() { // short hand for data: function() { //RM
+  data() {
     return {
       username: "",
       password: "",

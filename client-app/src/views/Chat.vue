@@ -6,6 +6,7 @@
               v-on:showpu-creater="popNewRoom=true"
               class="side-bar"/>
     <ChatMain v-on:send-mess="sendMess" v-bind:mess="mess" class="content"/>
+
     <div v-if="popJoinRoom" class="popup">
       <div class="frame">
         <h2 class="frame-c">Join Room</h2>
@@ -18,6 +19,7 @@
         <h4 class="error">{{joinError}}</h4>
       </div>
     </div>
+
     <div v-if="popNewRoom" class="popup">
       <div class="frame">
         <h2 class="frame-c">Create Room</h2>
@@ -29,10 +31,12 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
+import * as signalR from "@microsoft/signalr";
 import SideBar from '../components/chat/SideBar.vue';
 import ChatMain from '../components/chat/ChatMain.vue';
 // import {getRooms} from "../api/userAPI.js";
@@ -40,8 +44,12 @@ import * as uapi from "../api/userAPI.js";
 // import {getRoomMess} from "../api/roomAPI.js";
 // import {sendRoomMess} from "../api/roomAPI.js";
 import * as rapi from "../api/roomAPI.js";
+import * as realTime from "../api/realTmeChat.js";
 export default {
   name: "Chat",
+  // TODO * leave room
+  // TODO * room setting
+  // TODO * chang uesr info
   components: {
     SideBar,
     ChatMain,
@@ -50,6 +58,7 @@ export default {
     return {
       rooms: [],
       users: [],
+      /** @type {Array} */
       mess: [],
       typeChat: {},
       popJoinRoom:false,
@@ -57,47 +66,62 @@ export default {
       joinRoomId: "",
       newRoomName: "",
       joinError: "",
+      /** @param {signalR.HubConnection} */
+      connection: signalR.HubConnection,
+      connectionId: ""
     }
   },
   methods: {
     getData() {
       uapi.getRooms().then(res => res.json())
                     .then(val => this.rooms = val["$values"]);
-
+      
     },
     loadMessRoom(roomId) {
-      console.log("choose room " + roomId);
+      console.log("choose room: " + roomId);
+      
+      if(this.typeChat.roomId) {
+        realTime.leaveRoom(this.typeChat.roomId, this.connectionId)
+                .then(res => {
+                  if(res.ok) console.log("leave real time chat room: " + this.typeChat.roomId)
+                  else throw res.statusText;
+                }).catch(err => console.log(err));
+        
+      }
       this.typeChat = {
         type: "room",
         roomId: roomId,
       };
-      console.log(this.typeChat);
+
       rapi.getRoomMess(roomId).then(res => res.json()
-                .then(mess => this.mess = mess["$values"]))
-      console.log(this.mess);
-      console.log("hey");
-      for(let i = 0; i<this.mess.length ; i++) {
-        console.log(this.mess[i]["content"]);
-      }
-                                    //TODO add message
+                .then(roomMess => {
+                  console.log(roomMess["$values"]);
+                  this.mess = roomMess["$values"];
+                  console.log(this.mess);
+                  realTime.joinRoom(roomId, this.connectionId)
+                          .then(res => {
+                            if(res.ok) console.log("joined room: " + roomId);
+                            else throw res.text;
+                          }).catch(err => console.log(err));
+                }));
+
     },
     sendMess(mess) {
-      console.log("sendMess");
       console.log(this.typeChat["type"]);
+      console.log("sendMess: " + mess);
       if(this.typeChat["type"] === "room") {
         console.log("sendRoomMess");
         const userId = JSON.parse(localStorage.getItem("userInfo"))["id"];
-        console.log(this.typeChat["roomId"]); // FIXME how the fuck this is messeage //FIXME how the actual fuck
-        rapi.sendRoomMess(this.typeChat["roomId"], userId, mess)
+        console.log(this.typeChat["roomId"]);
+        realTime.sendMess2Room(this.typeChat["roomId"], userId, mess)
             .then(res => {
               if(!res.ok) console.log(res.statusText)
             }).catch(e => console.log(e)); // TODO show error
-
       } 
     },
     newRoom() {
       if(!this.newRoomName) {
-        console.log("//TODO create notice line")
+        console.log("//TODO create notice line");
         return;
       }
       uapi.newRoom(this.newRoomName)
@@ -105,8 +129,8 @@ export default {
           if(!res.ok) {
             res.json().then(err => {throw err;}).catch(console.log);
           }
+          this.getData();
         }).catch(e => console.log(e));
-      this.getData();
       this.newRoomName = "";
       this.popNewRoom = false;
     },
@@ -115,15 +139,40 @@ export default {
       rapi.joinRoom(this.joinRoomId)
           .then(res => {
             if(!res.ok) this.joinError = "Cant join room " + this.joinRoomId;
-            else this.joinError = "";
+            else {
+              this.joinError = "";
+              this.getData();
+            }
           });
-      this.getData();
       this.joinRoomId = "";
       this.popJoinRoom = false; 
+    },
+    buildConnection() {
+      this.connection = new signalR.HubConnectionBuilder()
+                              .withUrl("https://" + localStorage.getItem("domain") + "/chathub")
+                              .withAutomaticReconnect()
+                              .build();
+      this.connection
+          .start()
+          .then(() => this.connection
+                          .invoke("getConnectionId")
+                          .then(id => {
+                            this.connectionId = id;
+                            console.log(typeof(id));
+                            console.log("connectionID: " + id);
+                          })
+      );
+      this.connection.on("reciveMessage", newMess => { // vs function (newMess) {}
+        this.mess.splice(0, 0, newMess);
+      });
     }
   },
   created: function() { // RM same as created() {
     this.getData();
+    this.buildConnection();
+  },
+  destroyed: function() {
+    this.connection.stop();
   }
 }
 </script>

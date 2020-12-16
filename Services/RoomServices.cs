@@ -109,7 +109,13 @@ namespace DiscordRipoff.Services {
                 RoomUserId = roomUser.Id,
             };
             dbContext.Add(mess);
+            // ? seem terrible
             await dbContext.SaveChangesAsync();
+            mess = await dbContext.RoomMessages
+                                .Where(m => m.Id == mess.Id)
+                                .Include(rm => rm.RoomUser)
+                                .ThenInclude(ru => ru.User)
+                                .FirstAsync();
             return mess;
         }
     }

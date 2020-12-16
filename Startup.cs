@@ -62,7 +62,7 @@ namespace DiscordRipoff
             //         .AddDataAnnotations()
             //         .AddFormatterMappings();
 
-
+            // services.AddMvc(); vs AddMvcCore()
             //RM: detail
             // services.AddMvcCore() // add basic thing like: model binding, routing, filter, controller, constraint ...
             //         .AddApiExplorer() // alow get metadata of api to debug or generate document ...
@@ -87,8 +87,8 @@ namespace DiscordRipoff
             services.AddControllers()
                     .AddJsonOptions(options => {
                         // RM: stop the loop when mapping object
-                        options.JsonSerializerOptions
-                            .ReferenceHandler = ReferenceHandler.Preserve;
+                        options.JsonSerializerOptions.ReferenceHandler 
+                                = ReferenceHandler.Preserve;
                     });
             services.AddCors();
             
@@ -102,6 +102,7 @@ namespace DiscordRipoff
             services.AddDbContext<AppDbContext>(options => {
                 options.UseSqlite(conenctionString);
                 // options.UseMySQL(conenctionString);
+                
             });
 
             services.AddScoped<UserServices>();
@@ -116,7 +117,8 @@ namespace DiscordRipoff
 
             services.AddSignalRCore();
             services.AddSignalR().AddJsonProtocol(options => {
-                
+                options.PayloadSerializerOptions.ReferenceHandler 
+                        = ReferenceHandler.Preserve;
             });
         }
 

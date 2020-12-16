@@ -1,4 +1,4 @@
-export default {get, post, getToken, getUserId};
+export default {get, post, deleteMethod, getToken, getUserId};
 
 //?: does it need async await here // async function return Promise so guess not
 function get(/** @type {string} */url, data) {
@@ -24,6 +24,11 @@ function get(/** @type {string} */url, data) {
             // .then(val => console.log(val));
 }
 
+/**
+ * 
+ * @param {string} url 
+ * @param {object} data 
+ */
 function post(url, data) {
   url = "https://" + localStorage.getItem("domain") + url;
   console.log("post: " + url);
@@ -37,7 +42,25 @@ function post(url, data) {
               "Authorization": (token && "bearer " + token),
             },
             body: JSON.stringify(data),
-          }).catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+}
+
+function deleteMethod(url, data = null) {
+  url = "https://" + localStorage.getItem("domain") + url;
+  console.log("delete: " + url);
+  console.log(JSON.stringify(data));
+  const token = getToken();
+  return fetch(url, {
+            method: "DELETE",
+            headers: {
+              "Accept": "application/json",
+              "Content-type": "application/json; charset=utf-8",
+              "Authorization": (token && "bearer " + token),
+            },
+            body: JSON.stringify(data),
+          })
+          .catch(err => console.log(err));
 }
 
 function getToken() {

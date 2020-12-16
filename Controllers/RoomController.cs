@@ -4,9 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using DiscordRipoff.Data;
 using DiscordRipoff.Entities;
+using DiscordRipoff.Hubs;
 using DiscordRipoff.Services;
 using DiscordRipoff.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordRipoff.Controllers {
@@ -19,7 +21,8 @@ namespace DiscordRipoff.Controllers {
 
         public RoomController (
             RoomServices roomServices,
-            AppDbContext dbContext
+            AppDbContext dbContext,
+            IHubContext<ChatHub> hub
         ) {
             this.roomServices = roomServices;
             this.dbContext = dbContext;
@@ -99,12 +102,15 @@ namespace DiscordRipoff.Controllers {
             var mess = await roomServices.GetMessagesAsync(roomId);
             if(mess == null) return Conflict();
             var messModel = mess.Select(mess => new MessageModel{
-                Id = mess.Id,
-                Content = mess.Content,
-                UserName = mess.RoomUser.User.Username,
-                // TimeCreated = mess.TimeCreated.ToShortTimeString() + " - " + mess.TimeCreated.ToShortDateString(),
-                TimeCreated = mess.TimeCreated.ToString(provider: CultureInfo.CreateSpecificCulture("en-UK")),
-            }).Reverse().ToList();
+                                        Id = mess.Id,
+                                        Content = mess.Content,
+                                        UserName = mess.RoomUser.User.Username,
+                                        // TimeCreated = mess.TimeCreated.ToShortTimeString() + " - " + mess.TimeCreated.ToShortDateString(),
+                                        TimeCreated = mess.TimeCreated.ToString(provider: CultureInfo.CreateSpecificCulture("en-UK")),})
+                                .OrderByDescending(m => m.Id) // RM 3 way 2 sort list
+                                .ToList();
+            // messModel.Sort((a,b) => b.Id - a.Id); 
+            // messModel.Sort((a,b) => b.Id.CompareTo(a.Id));
             return Ok(messModel);
         }
 
@@ -113,7 +119,6 @@ namespace DiscordRipoff.Controllers {
             if(model.Content == "") return Conflict();
             var mess = await roomServices.CreatedMessageAsync(model.UserId, roomId, model.Content);
             if(mess == null) return Conflict();
-            // TODO: ues SignalR here
             return Ok(mess);
         }
     }

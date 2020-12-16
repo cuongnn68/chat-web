@@ -53,9 +53,14 @@ export default {
       };
 
       userAuth(info).then(res => {
-        let value = res.json().catch(e => console.log(e));
+        let value;
 
         if(res.ok) {
+          value = res.json()
+                      .catch(e => {
+                          console.log(e);
+                          this.error=e;
+                      });
           value.then(val => {
             if(!val["token"]) throw "Not Logined";
             localStorage.setItem("userInfo", JSON.stringify(val));
@@ -74,7 +79,6 @@ export default {
       }).catch(e => console.log(e));
 
       // this.$router.push({name: "About"});
-      //TODO: call api (post method) to athenticate, then $emit
     },
   }
 }

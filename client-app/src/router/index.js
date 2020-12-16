@@ -20,7 +20,7 @@ const routes = [
   },
   {
     path: "/login",
-    name: "Login", // RM: name used to .$router.push("name-of-view") to change view //TODO is it?
+    name: "Login",
     component: () => import("../views/Login.vue")
   },
   {
