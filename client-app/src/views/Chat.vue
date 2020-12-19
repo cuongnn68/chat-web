@@ -47,9 +47,6 @@ import * as rapi from "../api/roomAPI.js";
 import * as realTime from "../api/realTmeChat.js";
 export default {
   name: "Chat",
-  // TODO * leave room
-  // TODO * room setting
-  // TODO * chang uesr info
   components: {
     SideBar,
     ChatMain,
@@ -184,7 +181,7 @@ export default {
   }
   .side-bar {
     flex: 1;
-    max-width: 250px;
+    max-width: 300px;
     background-color: aliceblue;
   }
   .content {

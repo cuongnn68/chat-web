@@ -10,11 +10,13 @@
                 :key="room.id" 
                 v-bind:roomId="room.id" 
                 v-bind:roomName="room.name">{{room.name}}</p> -->
-      <ChatRoom v-on:click.native="choosed(room.id)"
+      <!-- RM click on component use v-on:click.native -->
+      <ChatRoom v-on:click-room="choosed"
                 v-for="room in rooms" 
                 v-bind:key="room.id" 
                 v-bind:roomId="room.id" 
                 v-bind:roomName="room.name"></ChatRoom>
+
       <!-- <ChatRoom roomId="222" roomName="Room 2" selected="true"/>  //TODO: add select solid border left -->
       <!-- <ChatRoom roomId="11111" roomName="Room 1"/>
       <ChatRoom roomId="333" roomName="Room 3"/>
@@ -81,16 +83,21 @@ export default {
 
 <style scoped>
   .parent {
+
     display: flex;
     flex-direction: column;
 
     box-shadow: 1px 0px 1px lightgray;
     /* background-color: green; */
+
+
   }
   .user {
     flex: 1;
     /* background-color: white; */
-    overflow-y: auto;
+    /* overflow-y: hidden; */
+    overflow-y: scroll;
+    /* overflow-x: visible; */
     display: flex;
     flex-direction: column;
     border-bottom: solid;

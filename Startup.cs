@@ -132,7 +132,7 @@ namespace DiscordRipoff
 
             app.UseCors(config => {
                 config
-                    .WithOrigins("http://192.168.100.6:8080")
+                    .WithOrigins("http://localhost:8080", "http://192.168.100.4:8080/")
                     // .AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
@@ -145,7 +145,7 @@ namespace DiscordRipoff
             {
                 // endpoints.MapDefaultControllerRoute();
                 endpoints.MapControllers();
-
+                
                 endpoints.MapHub<ChatHub>("/chathub", options => {
                     
                 });
