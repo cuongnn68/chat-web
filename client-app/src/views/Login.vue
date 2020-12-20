@@ -87,8 +87,8 @@ export default {
 <style scoped>
   input{
     width: 300px;
-    max-width: 400px;
     padding: 0.35rem;
+    max-width: 400px;
   }
 
   /* button {

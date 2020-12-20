@@ -3,13 +3,15 @@ export default {get, post, deleteMethod, getToken, getUserId};
 //?: does it need async await here // async function return Promise so guess not
 function get(/** @type {string} */url, data) {
   url = "https://" + localStorage.getItem("domain") + url;
-  let keys = Object.keys(data);
-  if(keys.length > 0) {
-    url = url + "?"
-    keys.forEach((key) => {
-            url += key + "=" + data[key] + "&";
-        });
-    url = url.slice(0, url.length-1);
+  if(data) {
+    let keys = Object.keys(data);
+    if(keys.length > 0) {
+      url = url + "?"
+      keys.forEach((key) => {
+              url += key + "=" + data[key] + "&";
+          });
+      url = url.slice(0, url.length-1);
+    }
   }
   console.log("get: " + url);
   const token = getToken();

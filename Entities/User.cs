@@ -11,6 +11,7 @@ namespace DiscordRipoff.Entities {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // auto increase
         public int Id { get; set; }
+        
         [RegularExpression(@"^[a-zA-Z]*$", ErrorMessage="test regex")]
         [Required]
         public string Username { get; set; }

@@ -40,7 +40,8 @@
         <ChatMessage username="nncuong" time="12:00" message="verry long long long long long long long long long long long long long long long long message"/> -->
       </div>
       <div class="chat-input">
-        <input ref="ok" v-model="input" class="input" type="text">
+        <input ref="ok" v-model="input" class="input" type="text"
+              v-on:keypress.enter="send" >
         <button v-on:click="send" class="button">Send</button>
       </div>
     </div>

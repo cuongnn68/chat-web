@@ -64,7 +64,7 @@ export default {
     text-decoration-line: none;
     padding: 0rem 0.6rem 0rem 0.6rem;
     line-height: 60px;
-    color: #221d63;
+    color: #5f566d;
     font-size: 20px;
     /* transition-duration: 0.35s; */
     cursor: pointer;

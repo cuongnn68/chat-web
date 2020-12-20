@@ -136,7 +136,7 @@ export default {
     line-height: 30px;
   }
   .join-rm:hover {
-    background-color: dodgerblue;
+    background-color: #5ebbb2;
     color: white;
   }
   .create-rm {
@@ -144,7 +144,7 @@ export default {
     line-height: 30px;
   }
   .create-rm:hover{
-    background-color: limegreen;
+    background-color: #67bb5e;
     color: white;
   }
 </style>

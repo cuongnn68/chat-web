@@ -57,7 +57,18 @@ namespace DiscordRipoff.Controllers {
 
         [HttpGet("{roomId}/user")]
         public async Task<IActionResult> GetUser(int roomId) {
-            var users = await roomServices.GetAllUsersAsync(roomId);
+            // var users = await roomServices.GetAllUsersAsync(roomId);
+            var roomUsers = await dbContext.RoomUsers
+                                        .Where(ru => ru.RoomId == roomId)
+                                        .Include(ru => ru.User)
+                                        .ToListAsync();
+            if(roomUsers == null) return NotFound();
+            var users = roomUsers.Select(ru => new UserInRoomModel{
+                                                    Id = ru.UserId,
+                                                    Username = ru.User.Username,
+                                                    Role = ru.Role.ToString(),
+                                                    TimeJoin = ru.TimeJoin,
+                                                }); // TODO ***************
             if(users == null) return NotFound();
             return Ok(users);
         }
@@ -74,13 +85,13 @@ namespace DiscordRipoff.Controllers {
         }
 
         [HttpPost("{roomId}/user/{userId}")]
-        // public async Task<IActionResult> AddUser(int roomId, int userId) {
-            //TODO //FIXME model binding not working
-        public async Task<IActionResult> AddRoomUser([FromRoute] RoomUserModel model) {
-            // Console.WriteLine(roomId + " " + userId);
-            // var roomUser = await roomServices.AddUserAsync(roomId, userId);
-            Console.WriteLine(model.RoomId + " " + model.UserId);
-            var roomUser = await roomServices.AddUserAsync(model.RoomId, model.UserId);
+        public async Task<IActionResult> AddUser(int roomId, int userId) {
+            //FIXME model binding not working //? now it work, not have to be below to work????
+            Console.WriteLine(roomId + " " + userId);
+            var roomUser = await roomServices.AddUserAsync(roomId, userId);
+        // public async Task<IActionResult> AddRoomUser([FromRoute] RoomUserModel model) {
+        //     Console.WriteLine(model.RoomId + " " + model.UserId);
+        //     var roomUser = await roomServices.AddUserAsync(model.RoomId, model.UserId);
             if(roomUser == null) return Conflict();
             return Created($"/api/room/{roomUser.Id}",roomUser);
         }
@@ -106,7 +117,7 @@ namespace DiscordRipoff.Controllers {
                                         Content = mess.Content,
                                         UserName = mess.RoomUser.User.Username,
                                         // TimeCreated = mess.TimeCreated.ToShortTimeString() + " - " + mess.TimeCreated.ToShortDateString(),
-                                        TimeCreated = mess.TimeCreated.ToString(provider: CultureInfo.CreateSpecificCulture("en-UK")),})
+                                        TimeCreated = MyTimeFormat.Short(mess.TimeCreated),})
                                 .OrderByDescending(m => m.Id) // RM 3 way 2 sort list
                                 .ToList();
             // messModel.Sort((a,b) => b.Id - a.Id); 
@@ -121,6 +132,13 @@ namespace DiscordRipoff.Controllers {
             if(mess == null) return Conflict();
             return Ok(mess);
         }
+    }
+
+    internal class UserInRoomModel {
+        public int Id { get; set; }
+        public string Username { get; set; }
+        public string Role { get; set; }
+        public DateTime TimeJoin { get; set; }
     }
 
     public class NewUserModel {
@@ -150,6 +168,7 @@ namespace DiscordRipoff.Controllers {
     public class RoomUserModel {
         public int RoomId { get; set; }
         public int UserId { get; set; }
+        public string Role { get; set; }
     }
 
     public class NewRoomModel {

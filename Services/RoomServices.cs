@@ -64,6 +64,8 @@ namespace DiscordRipoff.Services {
                                 .ToListAsync();
         }
 
+        
+
         public async Task<RoomUser> AddUserAsync(int roomId, int userId) {
             var roomUser = new RoomUser {
                 RoomId = roomId,

@@ -25,7 +25,7 @@ export default {
   // },
   methods: {
     clickSetting() {
-      this.$router.push("/test");
+      this.$router.push("/room/" + this.roomId);
     }
   }
 }

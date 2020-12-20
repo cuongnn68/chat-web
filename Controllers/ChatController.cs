@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DiscordRipoff.Data;
 using DiscordRipoff.Hubs;
 using DiscordRipoff.Services;
+using DiscordRipoff.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -55,7 +56,7 @@ namespace DiscordRipoff.Controllers {
             var messModel = new MessageModel {
                 Content = mess.Content,
                 Id = mess.Id,
-                TimeCreated = mess.TimeCreated.ToString(provider: CultureInfo.CreateSpecificCulture("en-UK")),
+                TimeCreated = MyTimeFormat.Short(mess.TimeCreated),
                 UserName = mess.RoomUser.User.Username
             };
             await chat.Clients.Group("room" + roomId).SendAsync("reciveMessage", messModel);

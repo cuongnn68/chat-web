@@ -17,3 +17,11 @@ export function joinRoom(roomId) {
   const userId = rapi.getUserId();
   return rapi.post("/api/room/" + roomId + "/user" , {userId})
 }
+
+/**
+ * 
+ * @param {number} roomId 
+ */
+export function getUsers(roomId) {
+  return rapi.get("/api/room/" + roomId + "/user");
+}
