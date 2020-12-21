@@ -167,6 +167,7 @@ export default {
   created: function() { // RM same as created() {
     this.getData();
     this.buildConnection();
+    this.$emit("newNoti", {content: "Choose or create a chat room"})
   },
   destroyed: function() {
     this.connection.stop();

@@ -42,17 +42,19 @@ export default {
       password2: "",
       email: "",
       phone: "",
-      error: "",
+      // error: "",
     }
   },
   methods: {
     register() {
       if(!this.username) {
-        this.error = "Username is empty";
+        this.newNoti("Username is empty", "red");
+        // this.error = "Username is empty";
         return;
       }
       if(!this.password) {
-        this.error = "Password is empty";
+        this.newNoti("Password is empty", "red");
+        // this.error = "Password is empty";
         return;
       }
       let reInfo = {
@@ -66,13 +68,16 @@ export default {
             .then(response => {
               if(response.ok) {
                 this.$router.push("/login");
+                this.newNoti("Register succes, please login", "green");
               } else {
                 response.json()
                         .then(value => {
                                 if(value["error"]) {
-                                  this.error = value["error"];
+                                  this.newNoti(value["error"], "red");
+                                  // this.error = value["error"];
                                 } else {
-                                  this.error = response.statusText;
+                                  this.newNoti(response.statusText, "red");
+                                  // this.error = response.statusText;
                                 }
                         }).catch(e => console.log(e));
               }
@@ -83,7 +88,9 @@ export default {
       // console.log("register methods");
       // this.$router.push({name: "About"});
     },
-
+    newNoti(content, color) {
+      this.$emit("newNoti", {type:color, content: content});
+    }
   }
 
 }

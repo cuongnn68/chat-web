@@ -8,7 +8,7 @@
 
 <script>
 import {HubConnection, HubConnectionBuilder} from "@microsoft/signalr";
-import api from "../api/index.js";
+import api from "../../api/index.js";
 export default {
   name: "Test",
   data() {

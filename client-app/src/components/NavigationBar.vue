@@ -4,19 +4,21 @@
     <router-link class="link" to="/">Home</router-link>
     <router-link class="link" to="/about">About</router-link>
     <router-link class="link" to="/chat">Chat</router-link>
+    <router-link class="link" to="/search">Search</router-link>
     <router-link class="link" to="/test">Test</router-link>
     <!-- <router-link class="link" to="/add-room">Add Room</router-link>
     <router-link class="link" to="/add-friend">Add Friend</router-link> -->
     <div class="empty"></div>
     <router-link v-if="!login" class="link" to="/login">Login</router-link>
     <router-link v-if="!login" class="link" to="/register">Register</router-link>
-    <router-link v-if="login" class="link" to="/info">Info</router-link>
+    <router-link v-if="login" class="link" v-bind:to="'/user/'+userId">Info</router-link>
     <div v-if="login" v-on:click="logout" class="link">Logout</div>
   </div>
 </template>
 
 <script>
 import {logout} from "../api/userAPI.js";
+import * as storage from "../utils/storage.js";
 export default {
   name: "NavBar",
   props: [
@@ -24,10 +26,14 @@ export default {
   ],
   data: function() {
     return {
+      // userId: 0,
       // login: true,
     }
   },
   computed: {
+    userId() {
+      return storage.getUser().id;
+    }
     // loginActive: function() {
     //   return this.login;
     // }
@@ -38,6 +44,7 @@ export default {
       localStorage.removeItem("userInfo");
       this.$emit('logout');
       this.$router.push("/login");
+      this.$emit("newNoti", {content: "Loged out", type: "green"});
     }
   }
 }

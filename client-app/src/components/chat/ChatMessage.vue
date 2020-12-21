@@ -48,7 +48,7 @@ export default {
     align-items: flex-end;
     /* TODO:
     put the fucking time lower
-    maybe because i use reverse column, 
+    maybe because using reverse column, 
     but why solum affect row,
     i mean fukc this shit*/
     /* ?: what?? */

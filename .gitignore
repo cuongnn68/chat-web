@@ -1,5 +1,6 @@
 omnisharp.json
 diagram/
+test-api.http
 
 bin/
 obj/

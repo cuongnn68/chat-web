@@ -5,7 +5,6 @@
         <h1 class="" >Login</h1>
         <div class="mrg-h line">
           <label class="inline1" for="username">Username</label> 
-          <!-- TODO: add space between inline1 & inline2 -->
           <input class="inline2" type="text" name="username" v-model="username">
         </div>
         <div class="mrg-h line">
@@ -27,7 +26,7 @@ export default {
     return {
       username: "",
       password: "",
-      error: "",
+      // error: "",
     }
   },
   methods: {
@@ -40,11 +39,13 @@ export default {
       //   password: this.password
       // });
       if(!this.username) {
-        this.error = "Username cant be empty";
+        this.newNoti("Username cant be empty", "red");
+        // this.error = "Username cant be empty";
         return;
       }
       if(!this.password) {
-        this.error = "Password cant be empty";
+        this.newNoti("Password cant be empty", "red");
+        // this.error = "Password cant be empty";
         return;
       }
       const info = {
@@ -59,27 +60,39 @@ export default {
           value = res.json()
                       .catch(e => {
                           console.log(e);
-                          this.error=e;
+                          this.newNoti(e, "red");
+                          // this.error=e;
                       });
           value.then(val => {
             if(!val["token"]) throw "Not Logined";
             localStorage.setItem("userInfo", JSON.stringify(val));
             this.$emit("loged-in");
             this.$router.push("/chat");
+            this.newNoti("Logined", "green");
           });
         } else {
-          value.then(err => {
-            if(err["error"]) {this.error = err["error"];}
-            else {this.error = res.text;}
+          res.json().then(err => {
+            if(err["error"]) {
+              this.newNoti(err["error"], "red");
+              // this.error = err["error"];
+            }
+            else {
+              this.newNoti(res.text, "red");
+              // this.error = res.text;
+            }
           }).catch(e => {
             console.log(e);
-            this.error = "Error"
+            this.newNoti("Error", "red");
+            // this.error = "Error"
           })
         }
       }).catch(e => console.log(e));
 
       // this.$router.push({name: "About"});
     },
+    newNoti(content, color) {
+      this.$emit("newNoti", {type:color, content: content});
+    }
   }
 }
 </script>

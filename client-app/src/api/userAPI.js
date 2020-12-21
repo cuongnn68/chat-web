@@ -31,6 +31,10 @@ export function testAPI(username, id) {
   // .then(console.log);
 }
 
+export function getInfo(userId) {
+  return rapi.get("/api/user/" + userId);
+}
+
 export function registerUser(data) {
   return rapi.post("/api/user",data);
 }

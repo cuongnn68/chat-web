@@ -84,6 +84,30 @@ namespace DiscordRipoff.Controllers {
             return Ok();
         }
 
+        [HttpGet("{userId}")]
+        [JWTAuthentication]
+        public async Task<IActionResult> GetUser(int userId) {
+            User user;
+            try {
+                user = await dbContext.Users.FindAsync(userId);
+                if(user == null) throw new NullReferenceException();
+            } catch (NullReferenceException) {
+                return Conflict(new ErrorModel{Error = "User not exist"});
+            } catch (Exception e) {
+                Console.WriteLine(e);
+                return BadRequest();
+            }
+            return Ok(user);
+        }
+
+        // [HttpPut("{userId}")] //TODO http put user 
+        // [JWTAuthentication]
+        // public IActionResult UpdateUser(int userId) {
+            
+        // }
+
+        // TODO http put user/password
+
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] SearchUserModel model) {
             if (model.Id < 1 && model.Username == null) return Ok(new List<User>());

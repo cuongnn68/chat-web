@@ -34,27 +34,41 @@ const routes = [
     name: "Chat",
     component: () => import("../views/Chat.vue")
   },
-  {
-    path: "/test",
-    name: "Test",
-    component: () => import("../views/Test.vue")
-  },
-  {
-    path: "/user",
-    name: "UserInfo",
-    component: () => import("../views/UserInfo.vue")
-  },
+  // {
+  //   path: "/user",
+  //   name: "UserInfo",
+  //   component: () => import("../views/UserInfo.vue")
+  // },
   {
     path: "/room/:id",
     name: "RoomManager",
     component: () => import("../views/RoomManager.vue")
   },
-  //TODO: add other route
+  {
+    path: "/user/:id",
+    name: "UserInfo",
+    component: () => import("../views/UserInfo.vue")
+  },
+  {
+    path: "/search",
+    name: "Search",
+    component: () => import("../views/Search.vue")
+  },
   {
     path: "*",
     name: "Any",
     component: () => import("../views/Error404.vue")
   },
+  {
+    path: "/test",
+    name: "Test",
+    component: () => import("../views/tests/Test.vue")
+  },
+  {
+    path: "/test-param*",
+    name: "TestParam",
+    component: () => import("../views/tests/TestMultiParams.vue")
+  }
 ]
 
 const router = new VueRouter({
@@ -68,7 +82,7 @@ router.beforeEach((to, from, next) => {
   const token = user && user["token"];
   
   const privatePage = ["/chat", "/search"];
-  const publicPage = ["/", "/about", "/login", "/register", "/user", "/test", "/room"] // TODO: create error page and put this shit away
+  // const publicPage = ["/", "/about", "/login", "/register", "/user", "/test", "/room"]
 
   // const exist = publicPage.concat(privatePage).findIndex(path => path.startsWith(to.path));
   

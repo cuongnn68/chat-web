@@ -25,3 +25,7 @@ export function joinRoom(roomId) {
 export function getUsers(roomId) {
   return rapi.get("/api/room/" + roomId + "/user");
 }
+
+export function getInfo(roomId) {
+  return rapi.get("/api/room/" + roomId);
+}
