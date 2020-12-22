@@ -35,6 +35,10 @@ export function getInfo(userId) {
   return rapi.get("/api/user/" + userId);
 }
 
+export function updateUser(userId, fullName, email, phone) {
+  return rapi.put("/api/user/" + userId, {fullName, email, phone});
+}
+
 export function registerUser(data) {
   return rapi.post("/api/user",data);
 }
@@ -62,3 +66,6 @@ export function newRoom(roomName) {
   return rapi.post("/api/user/" + rapi.getUserId() + "/room", {roomName});
 }
 
+export function leaveRoom(roomId, userId) {
+  return rapi.deleteMethod("/api/user/" + userId + "/room/" +roomId);
+}

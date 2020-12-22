@@ -26,6 +26,18 @@ export function getUsers(roomId) {
   return rapi.get("/api/room/" + roomId + "/user");
 }
 
+export function removeUser(roomId, userId) {
+}
+
+
 export function getInfo(roomId) {
   return rapi.get("/api/room/" + roomId);
+}
+
+export function update(roomId, roomName) {
+  return rapi.put("/api/room/" + roomId, {name: roomName});
+}
+
+export function deleteRoom(roomId) {
+  return rapi.deleteMethod("/api/room/" + roomId);
 }

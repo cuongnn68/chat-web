@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +9,8 @@ using DiscordRipoff.Hubs;
 using DiscordRipoff.Services;
 using DiscordRipoff.Utils;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,11 +19,11 @@ namespace DiscordRipoff.Controllers {
     [Route("api/room")]
     // [JWTAuthentication]
     public class RoomController : Controller {
-        private RoomServices roomServices;
+        private RoomService roomServices;
         private AppDbContext dbContext;
 
         public RoomController (
-            RoomServices roomServices,
+            RoomService roomServices,
             AppDbContext dbContext,
             IHubContext<ChatHub> hub
         ) {
@@ -43,6 +46,10 @@ namespace DiscordRipoff.Controllers {
 
         [HttpPut("{roomId}")]
         public async Task<IActionResult> Update([FromBody] UpdateRoomModel model, int roomId) {
+            // TODO check if user is admin
+            if(!ModelState.IsValid) {
+                return BadRequest();
+            }
             var ok = await roomServices.UpdateAsync(roomId, model.Name);
             return Ok();
         }
@@ -103,7 +110,7 @@ namespace DiscordRipoff.Controllers {
             // var removed = await roomServices.RemoveUserAsync(model.UserId, model.RoomId);
             // RM: for real??????????????
             if(removed) return Ok();
-            return Conflict();
+            return Conflict(new ErrorModel{Error="Cant remove user"});
         }
 
         // TODO: change user role
@@ -161,6 +168,7 @@ namespace DiscordRipoff.Controllers {
     //RM: ctrl k + ctrl i: show document
 
     public class UpdateRoomModel {
+        [Required]
         public string Name { get; set; }
     }
 

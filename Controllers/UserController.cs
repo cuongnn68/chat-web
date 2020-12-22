@@ -16,13 +16,13 @@ namespace DiscordRipoff.Controllers {
     // [JWTAuthentication]
     public class UserController : Controller {
         private UserServices userServices;
-        private RoomServices roomServices;
+        private RoomService roomServices;
         private JWTService jwtService;
         private AppDbContext dbContext;
 
         public UserController(
             UserServices userServices,
-            RoomServices roomServices,
+            RoomService roomServices,
             JWTService jwtService,
             AppDbContext dbContext) {
             this.userServices = userServices;
@@ -100,13 +100,26 @@ namespace DiscordRipoff.Controllers {
             return Ok(user);
         }
 
-        // [HttpPut("{userId}")] //TODO http put user 
-        // [JWTAuthentication]
-        // public IActionResult UpdateUser(int userId) {
-            
-        // }
+        [HttpPut("{userId}")] 
+        [JWTAuthentication]
+        public async Task<IActionResult> UpdateUser(int userId, UpdateUserModel model) {
+            //TODO check if the samce user request
+            // if(!ModelState.IsValid) return BadRequest;
+            var user = await userServices.UpdateAsync(userId, model.FullName, model.Email, model.Phone);
+            if(user == null) return Conflict(new ErrorModel{Error="Errrrrrrorrrrrrrrrrorrorororororo"});
+            return Ok();
+        }
 
-        // TODO http put user/password
+        // TODO http put user/password | how to logout other token
+        // [HttpPut("{userId}")]
+        // [JWTAuthentication]
+        // public async Task<IActionResult> UpdatePassword(int userId, string newPassword) {
+        //     //TODO check password
+        //     //TODO check if user make request is owner
+        //     var ok = await userServices.UpdatePasswordAsync(userId, newPassword);
+        //     if(ok) return Ok();
+        //     return BadRequest();
+        // }
 
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] SearchUserModel model) {
@@ -141,6 +154,26 @@ namespace DiscordRipoff.Controllers {
             if(room == null) return Conflict(new ErrorModel{Error="Cant create room"});
             return Created($"/api/room/{room.Id}",room);
         }
+
+        [HttpDelete("{userId}/room/{roomId}")]
+        [JWTAuthentication]
+        public async Task<IActionResult> LeaveRoom(int userId, int roomId) {
+            // TODO check if userId is the same as in token
+            var ok = await roomServices.RemoveUserAsync(userId, roomId);
+            if(ok) return Ok();
+            return Conflict(new ErrorModel{Error="Cant leave room"});
+        }
+    }
+
+    public class UpdateUserModel {
+        // [Required]
+        public string FullName { get; set; }
+
+        // [Required]
+        public string Email { get; set; }
+
+        // [Required]
+        public string Phone { get; set; }
     }
 
     public class RoomModel {

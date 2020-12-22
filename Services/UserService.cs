@@ -20,6 +20,31 @@ namespace DiscordRipoff.Services {
             return true;
         }
 
+        public async Task<User> UpdateAsync(int userId, string fullName = null, string email = null, string phone = null) {
+            var user = await dbContext.Users.FindAsync(userId);
+            if(user == null) return null;
+            // DONE make value == null and only update value != null
+            if(fullName != null && fullName != "") user.FullName = fullName;
+            if(email != null && email != "") user.Email = email;
+            if(phone != null && phone != "") user.Phone = phone;
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            return user;
+        }
+
+        // TODO finish this change
+        public async Task<bool> UpdatePasswordAsync(int userId, string password) {
+            // TODO check password
+            var user = await dbContext.Users.FindAsync(userId);
+            if(user == null) return false;
+            // TODO logout all exist JWT
+            
+            user.Password = password;
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<User>> SearchAsync(int id, string name) {
             return await dbContext.Users.Where(user => user.Id.ToString().Contains(id.ToString()) 
                                             || user.Username.Contains(name))

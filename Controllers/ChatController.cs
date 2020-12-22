@@ -14,12 +14,12 @@ namespace DiscordRipoff.Controllers {
     [Route("api/chat")]
     public class ChatController : Controller {
         private IHubContext<ChatHub> chat;
-        private RoomServices roomServices;
+        private RoomService roomServices;
         private AppDbContext dbContext;
 
         public ChatController(
             IHubContext<ChatHub> chat,
-            RoomServices roomServices,
+            RoomService roomServices,
             AppDbContext dbContext
         ) {
             this.chat = chat;

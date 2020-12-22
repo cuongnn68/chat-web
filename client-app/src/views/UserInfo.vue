@@ -18,20 +18,22 @@
         </div>
         <div class="in">
           <label for="full-name">Full name</label>
-          <input name="full-name" type="text" v-model="user.fullName">
+          <input name="full-name" type="text" v-model="user.fullName" v-bind:disabled="!isOwner">
         </div>
         <div class="in">
           <label for="email">Email</label>
-          <input name="email" type="text" v-model="user.email">
+          <input name="email" type="text" v-model="user.email" v-bind:disabled="!isOwner">
         </div>
         <div class="in">
           <label for="phone">Phone</label>
-          <input name="phone" type="text" v-model="user.phone">
+          <input name="phone" type="text" v-model="user.phone" v-bind:disabled="!isOwner">
         </div>
-        <button class="btn">Update</button>
+        <button class="btn" v-if="isOwner" v-on:click="updateUser">Update</button>
       </div>
 
-      <div class="pass">
+
+      <!-- TODO wait when can logout other token on server -->
+      <div v-if="false&&isOwner" class="pass">
         <h2>Change password</h2>
         <div class="in">
           <label for="old-pass">Old password</label>
@@ -53,7 +55,7 @@
 </template>
 
 <script>
-import * as ls from "../utils/storage.js";
+import * as st from "../utils/storage.js";
 import * as userAPI from "../api/userAPI.js";
 export default {
   name: "UserInfo",
@@ -64,17 +66,44 @@ export default {
   methods: {
     getUserInfo() {
       userAPI.getInfo(this.$route.params.id)
-            .then(res => res.json()
-                        .then(val => {
-                          console.log(val);
-                          this.user.id = val.id;
-                          this.user.username = val.username;
-                          this.user.fullName = val.fullName;
-                          this.user.email = val.email;
-                          this.user.phone = val.phone;
-                          this.user.dob = val.dateOfBirth;
-            }).catch(e => {throw e;}))
-            .catch(e => console.log(e));
+            .then(res => {
+              if(res.ok) {
+                res.json().then(val => {
+                    console.log(val);
+                    this.user.id = val.id;
+                    this.user.username = val.username;
+                    this.user.fullName = val.fullName;
+                    this.user.email = val.email;
+                    this.user.phone = val.phone;
+                    this.user.dob = val.dateOfBirth;
+                    this.isOwner = st.getUser().id === val.id;
+                  }).catch(e => console.log(e));
+              } else {
+                this.$router.push("/home");
+                this.newNoti("Cant load user", "red");
+              }
+            })
+            .catch(e => {
+              console.log(e);
+              this.newNoti("ERROR", "red");
+            });
+    },
+    updateUser() {
+      userAPI.updateUser(this.user.id, this.user.fullName||"", this.user.email||"", this.user.phone||"")
+            .then(res => {
+              if(res.ok) {
+                this.newNoti("Updated user info", "green");
+              } else {
+                res.json().then(val => this.newNoti(val.error, "red"));
+              }
+            })
+            .catch(e => {
+              console.log(e);
+              this.newNoti("ERROR cant update", "red");
+            });
+    },
+    newNoti(content, color) {
+      this.$emit("newNoti", {content, type: color});
     }
   },
   data: function() {

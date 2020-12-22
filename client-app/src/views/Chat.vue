@@ -16,7 +16,7 @@
           <button v-on:click="joinRoom">Join</button>
           <button v-on:click="popJoinRoom=false">Cancel</button>
         </div>
-        <h4 class="error">{{joinError}}</h4>
+        <!-- <h4 class="error">{{joinError}}</h4> -->
       </div>
     </div>
 
@@ -62,7 +62,7 @@ export default {
       popNewRoom: false,
       joinRoomId: "",
       newRoomName: "",
-      joinError: "",
+      // joinError: "",
       /** @param {signalR.HubConnection} */
       connection: signalR.HubConnection,
       connectionId: ""
@@ -125,8 +125,10 @@ export default {
         .then(res => {
           if(!res.ok) {
             res.json().then(err => {throw err;}).catch(console.log);
+          } else {
+            this.getData();
+            this.newNoti("New room create", "green");
           }
-          this.getData();
         }).catch(e => console.log(e));
       this.newRoomName = "";
       this.popNewRoom = false;
@@ -135,14 +137,17 @@ export default {
       console.log(this.joinRoomId);
       rapi.joinRoom(this.joinRoomId)
           .then(res => {
-            if(!res.ok) this.joinError = "Cant join room " + this.joinRoomId;
-            else {
-              this.joinError = "";
+            if(!res.ok) {
+              console.log(this.joinRoomId);
+              this.newNoti("Cant join room with id: " + this.joinRoomId, "red");
+              // this.joinError = "Cant join room with id" + this.joinRoomId;
+            } else {
+              // this.joinError = "";
               this.getData();
             }
+            this.joinRoomId = "";
           });
-      this.joinRoomId = "";
-      this.popJoinRoom = false; 
+      this.popJoinRoom = false;
     },
     buildConnection() {
       this.connection = new signalR.HubConnectionBuilder()
@@ -162,6 +167,9 @@ export default {
       this.connection.on("reciveMessage", newMess => { // vs function (newMess) {}
         this.mess.splice(0, 0, newMess);
       });
+    },
+    newNoti(content, color) {
+      this.$emit("newNoti", {content, type: color});
     }
   },
   created: function() { // RM same as created() {
@@ -171,7 +179,7 @@ export default {
   },
   destroyed: function() {
     this.connection.stop();
-  }
+  },
 }
 </script>
 

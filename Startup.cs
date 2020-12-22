@@ -106,13 +106,14 @@ namespace DiscordRipoff
             });
 
             services.AddScoped<UserServices>();
-            services.AddScoped<RoomServices>();
+            services.AddScoped<RoomService>();
+            services.AddScoped<SearchService>();
 
             var secretKey = config["JWT:Secret"];
             services.AddScoped<JWTService>(services => {
                 return new JWTService(secretKey);
             });
-
+            
             services.AddScoped<JWTAuthenticationAttribute>();
 
             services.AddSignalRCore();

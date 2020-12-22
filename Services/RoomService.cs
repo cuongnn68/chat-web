@@ -8,10 +8,10 @@ using DiscordRipoff.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace DiscordRipoff.Services {
-    public class RoomServices {
+    public class RoomService {
         private AppDbContext dbContext;
 
-        public RoomServices (
+        public RoomService (
             AppDbContext dbContext
         ) {
             this.dbContext = dbContext;
@@ -47,10 +47,13 @@ namespace DiscordRipoff.Services {
         }
 
         public async Task<bool> UpdateAsync(int id, string name) {
-            var room = new Room {
-                Id = id,
-                Name = name,
-            };
+            // var room = new Room {
+            //     Id = id,
+            //     Name = name,
+            // };
+            var room = await dbContext.Rooms.FindAsync(id);
+            if(room == null) return false;
+            room.Name = name;
             dbContext.Update(room);
             await dbContext.SaveChangesAsync();
             return true;
@@ -82,8 +85,9 @@ namespace DiscordRipoff.Services {
             var roomUser = await dbContext.RoomUsers
                                         .FirstOrDefaultAsync(rUser => 
                                             rUser.UserId == userId && rUser.RoomId == roomId);
-            if(roomUser == null) return false;
+            if(roomUser == null || roomUser.Role == RoomRole.ADMIN) return false;
             dbContext.Remove(roomUser);
+            //? what happen if remove a row not exist
             await dbContext.SaveChangesAsync();
             return true;
         }

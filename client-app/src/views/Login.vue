@@ -12,7 +12,7 @@
           <input class="inline2" type="password" v-model="password">
         </div>
         <button class="mrg-h" >Login</button>
-        <p class="error">{{error}}</p>
+        <!-- <p class="error">{{error}}</p> -->
       </form>
     </div>
   </div>

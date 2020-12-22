@@ -10,7 +10,7 @@
         v-bind:class="{'red-noti': noti.type==='red', 'grn-noti': noti.type==='green'}">
         <!-- <i class="fas fa-exclamation-triangle"></i> -->
         <i class="fas fa-bell" v-bind:class="{'fa-exclamation': noti.type==='red', 'fa-rocket': noti.type==='green'}"></i>
-        <p class="space-side">
+        <p class="space-side" style="overflow:auto;">
           {{noti.content}}
         </p>
         <i v-on:click="deleteNoti(noti.time)" class="fas fa-times-circle del-noti"></i>
@@ -273,8 +273,10 @@ export default {
     /* border-color: gray;
     background-color: lightgray;
     color: black; */
+    background: #ffffffc9;
     /* box-shadow: 1px 1px 1px 0px darkgray; */
     box-shadow: 1.5px 1.5px 2.5px 0px gray;
+    /* overflow: auto; */
 
   }
   .nor-noti:hover {

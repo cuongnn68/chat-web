@@ -24,9 +24,9 @@
       </div>
       <!-- <p>Date of Birth</p> -->
       <button v-on:click="register">Register</button>
-      <div class="error">
+      <!-- <div class="error">
         <p>{{error}}</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
