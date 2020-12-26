@@ -2,6 +2,7 @@ omnisharp.json
 diagram/
 test-api.http
 
+out/
 bin/
 obj/
 .vscode/

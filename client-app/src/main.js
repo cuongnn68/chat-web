@@ -9,7 +9,12 @@ new Vue({
   render: h => h(somethingEles)
 }).$mount("#app");
 
-localStorage.setItem("domain", "localhost:5001");
+console.log(process.env.NODE_ENV === "development");
+if(process.env.NODE_ENV === "development") {
+  localStorage.setItem("domain", "localhost:5001");
+} else {
+  localStorage.setItem("domain", "localhost:5001"); // TODO change to domain of azure
+}
 document.title = "Discord ripoff";
 
 // DONE * sub url???
