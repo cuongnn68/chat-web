@@ -1,10 +1,11 @@
 omnisharp.json
 diagram/
+cert/
+
 test-api.http
 
 out/
 bin/
 obj/
 .vscode/
-
 client-app/node_modules/

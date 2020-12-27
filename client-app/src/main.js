@@ -9,11 +9,11 @@ new Vue({
   render: h => h(somethingEles)
 }).$mount("#app");
 
-console.log(process.env.NODE_ENV === "development");
+console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === "development") {
   localStorage.setItem("domain", "localhost:5001");
 } else {
-  localStorage.setItem("domain", "localhost:5001"); // TODO change to domain of azure
+  localStorage.setItem("domain", "discord-ripoff.azurewebsites.net"); // DONE change to domain of azure
 }
 document.title = "Discord ripoff";
 
