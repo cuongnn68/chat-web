@@ -11,9 +11,9 @@ new Vue({
 
 console.log(process.env.NODE_ENV);
 if(process.env.NODE_ENV === "development") {
-  localStorage.setItem("domain", "localhost:5001");
+  localStorage.setItem("domain", "http://localhost:5000");
 } else {
-  localStorage.setItem("domain", "discord-ripoff.azurewebsites.net"); // DONE change to domain of azure
+  localStorage.setItem("domain", "https://discord-ripoff.azurewebsites.net"); // DONE change to domain of azure
 }
 document.title = "Discord ripoff";
 
@@ -25,6 +25,7 @@ document.title = "Discord ripoff";
 // DONE * chang uesr info : function
 // DONE * find group, user ui
 // DONE * find group, user function
+// TODO * noti when cant connect to server
 // TODO * user chat (db, api, signalr, user stuff like the room one)
 // TODO * Datetime
 // TODO * check input login, register...

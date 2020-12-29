@@ -84,6 +84,10 @@ namespace DiscordRipoff
             // });
             // services.AddRazorPages(); // add AddRazorViewEngine and other services
             
+            // RM ctrl alt arrow right: move window to the right (split window)
+            // RM ctrl alt arrow left: move window to the left (unsplit window)
+            // RM ctrl space one more to show read more
+
             services.AddControllers()
                     .AddJsonOptions(options => {
                         // RM: stop the loop when mapping object
@@ -121,6 +125,8 @@ namespace DiscordRipoff
                 options.PayloadSerializerOptions.ReferenceHandler 
                         = ReferenceHandler.Preserve;
             });
+
+            services.AddSwaggerGen();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -129,6 +135,10 @@ namespace DiscordRipoff
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseSwagger();
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json","Test xem the nao");
+            });
             app.UseStaticFiles();
 
             app.UseCors(config => {

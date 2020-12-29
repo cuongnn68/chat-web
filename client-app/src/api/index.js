@@ -1,8 +1,11 @@
 export default {get, post, deleteMethod, put, getToken, getUserId};
 
+
+
 //?: does it need async await here // async function return Promise so guess not
 function get(/** @type {string} */url, data) {
-  url = "https://" + localStorage.getItem("domain") + url;
+  // url = "https://" + localStorage.getItem("domain") + url;
+  url = localStorage.getItem("domain") + url;
   if(data) {
     let keys = Object.keys(data);
     if(keys.length > 0) {
@@ -32,7 +35,8 @@ function get(/** @type {string} */url, data) {
  * @param {object} data 
  */
 function post(url, data) {
-  url = "https://" + localStorage.getItem("domain") + url;
+  // url = "https://" + localStorage.getItem("domain") + url;
+  url = localStorage.getItem("domain") + url;
   console.log("post: " + url);
   console.log(JSON.stringify(data));
   const token = getToken();
@@ -49,7 +53,8 @@ function post(url, data) {
 }
 
 function put(url, data) {
-  url = "https://" + localStorage.getItem("domain") + url;
+  // url = "https://" + localStorage.getItem("domain") + url;
+  url = localStorage.getItem("domain") + url;
   console.log("put: " + url);
   console.log(JSON.stringify(data));
   const token = getToken();
@@ -66,7 +71,8 @@ function put(url, data) {
 }
 
 function deleteMethod(url, data = null) {
-  url = "https://" + localStorage.getItem("domain") + url;
+  // url = "https://" + localStorage.getItem("domain") + url;
+  url = localStorage.getItem("domain") + url;
   console.log("delete: " + url);
   console.log(JSON.stringify(data));
   const token = getToken();

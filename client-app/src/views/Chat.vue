@@ -151,7 +151,8 @@ export default {
     },
     buildConnection() {
       this.connection = new signalR.HubConnectionBuilder()
-                              .withUrl("https://" + localStorage.getItem("domain") + "/chathub")
+                              // .withUrl("https://" + localStorage.getItem("domain") + "/chathub")
+                              .withUrl(localStorage.getItem("domain") + "/chathub")
                               .withAutomaticReconnect()
                               .build();
       this.connection

@@ -26,7 +26,8 @@ export function getUsers(roomId) {
   return rapi.get("/api/room/" + roomId + "/user");
 }
 
-export function removeUser(roomId, userId) {
+export function removeUser(roomId, userId) { // FIXED forgot to add this shit
+  return rapi.deleteMethod("/api/room/" + roomId + "/user/" + userId);
 }
 
 

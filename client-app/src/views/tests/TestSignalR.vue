@@ -25,7 +25,8 @@ export default {
   methods: {
     buildHub() {
       this.connection = new HubConnectionBuilder()
-            .withUrl("https://" + localStorage.getItem("domain") + "/chathub")
+            // .withUrl("https://" + localStorage.getItem("domain") + "/chathub")
+            .withUrl(localStorage.getItem("domain") + "/chathub")
             .withAutomaticReconnect()
             .build();
       this.connection.on("AddNewMessage", message => {
