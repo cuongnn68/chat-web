@@ -33,20 +33,20 @@
       <ChatRoom roomId="9999" roomName="Room 18888"/> -->
     </div>
     <div class="name">User</div>
-    <div class="chat-room">
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-      <ChatUser userId="6969" userName="Nana"/>
-    </div>
+<!--    <div class="chat-room">-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--      <ChatUser userId="6969" userName="Nana"/>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -57,7 +57,7 @@ export default {
   name: "SideBar",
   components: {
     ChatRoom,
-    ChatUser
+    // ChatUser
   },
   props: [
     "rooms"

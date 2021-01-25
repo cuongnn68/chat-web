@@ -11,7 +11,7 @@
     <div class="empty"></div>
     <router-link v-if="!login" class="link" to="/login">Login</router-link>
     <router-link v-if="!login" class="link" to="/register">Register</router-link>
-    <router-link v-if="login" class="link" v-bind:to="'/user/'+userId">Info</router-link>
+    <router-link v-if="login" class="link" v-bind:to="'/user/'+userIdMethod()">Info</router-link>
     <div v-if="login" v-on:click="logout" class="link">Logout</div>
   </div>
 </template>
@@ -32,7 +32,7 @@ export default {
   },
   computed: {
     userId() {
-      return storage.getUser().id;
+      return storage.getUser().id; // FIXME: not update, had to use method instead of this
     }
     // loginActive: function() {
     //   return this.login;
@@ -45,6 +45,9 @@ export default {
       this.$emit('logout');
       this.$router.push("/login");
       this.$emit("newNoti", {content: "Loged out", type: "green"});
+    },
+    userIdMethod() {
+      return storage.getUser().id;
     }
   }
 }

@@ -21,8 +21,8 @@ document.title = "Discord ripoff";
 // DONE * setting room button
 // DONE * room setting (change name, delete user, leave room, delete room) : new view page
 // DONE * room setting (change name, delete user, leave room, delete room) : function
-// DONE * chang uesr info ui
-// DONE * chang uesr info : function
+// DONE * chang user info ui
+// DONE * chang user info : function
 // DONE * find group, user ui
 // DONE * find group, user function
 // TODO * noti when cant connect to server

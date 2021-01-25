@@ -49,7 +49,8 @@ namespace DiscordRipoff.Controllers {
         }
 
         [HttpPost("auth")]
-        public async Task<IActionResult> Login(LoginModel model) {
+        public async Task<IActionResult> Login(LoginModel model) { 
+            // TODO when use already login
             // throw new Exception("test");
             var ok = await userServices.ValidateUserAsync(model.Username.ToLower(), model.Password);
             if (!ok) return Unauthorized(new ErrorModel{Error="Wrong password or username"});

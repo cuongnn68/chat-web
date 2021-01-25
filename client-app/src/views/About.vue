@@ -1,6 +1,7 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <h3>about page</h3>
+    <p>Thông tin trang web blah blah ...</p>
   </div>
 </template>
 

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using System.Text.Json.Serialization;
 using DiscordRipoff.Hubs;
+using Microsoft.OpenApi.Models;
 
 namespace DiscordRipoff
 {
@@ -123,10 +124,35 @@ namespace DiscordRipoff
             services.AddSignalRCore();
             services.AddSignalR().AddJsonProtocol(options => {
                 options.PayloadSerializerOptions.ReferenceHandler 
-                        = ReferenceHandler.Preserve;
+                    = ReferenceHandler.Preserve;
             });
 
-            services.AddSwaggerGen();
+            // ? big dawat
+            services.AddSwaggerGen(options => {
+                options.AddSecurityDefinition("NotBearer", new OpenApiSecurityScheme{ // name matter // like ID
+                    Name = "Authorization", // name to put to header 
+                    Scheme = "Bearer wat ever", // Not fucking matter
+                    Description = "JWT only - without bearer",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    // BearerFormat = "JWT",
+                    // Reference = new OpenApiReference {
+                    //     Id = "Bearer",
+                    //     Type = ReferenceType.SecurityScheme
+                    // }
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference { 
+                                Id = "NotBearer", // pointer to defined scheme up there
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new string[] {} 
+                    }
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
